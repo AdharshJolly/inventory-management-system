@@ -4,7 +4,8 @@ import MainLayout from './components/layout/MainLayout'
 import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import Suppliers from './pages/Suppliers'
-import Transactions from './pages/Transactions'
+import TransactionHistory from './pages/TransactionHistory'
+import TransactionExecution from './pages/TransactionExecution'
 import Login from './pages/Login'
 
 // Protected Route Wrapper
@@ -47,7 +48,13 @@ function App() {
 
       <Route path="/transactions" element={
         <ProtectedRoute>
-          <Transactions />
+          <TransactionExecution />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/history" element={
+        <ProtectedRoute>
+          <TransactionHistory />
         </ProtectedRoute>
       } />
 
