@@ -17,7 +17,7 @@ Building the core environment and the REST API for the Inventory Management Syst
     - [x] Implement Feature: Create `authMiddleware` to protect routes
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation and Initial Backend' (Protocol in workflow.md) 465df9e
 
-## Phase 2: CRUD APIs (Suppliers & Products)
+## Phase 2: CRUD APIs (Suppliers & Products) [checkpoint: 70f1718]
 Building the RESTful endpoints for managing core entities.
 
 - [x] Task: Supplier API (CRUD) 902b875
@@ -26,7 +26,7 @@ Building the RESTful endpoints for managing core entities.
 - [x] Task: Product API (CRUD) 73f441b
     - [x] Write Tests: Product controller unit and integration tests
     - [x] Implement Feature: Create routes and controller for Product CRUD (must reference a Supplier)
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: CRUD APIs (Suppliers & Products)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: CRUD APIs (Suppliers & Products)' (Protocol in workflow.md) 70f1718
 
 ## Phase 3: Inventory Logic and Dashboard API
 Implementing the core business logic and data aggregation.
