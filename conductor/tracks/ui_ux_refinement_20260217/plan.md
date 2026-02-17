@@ -45,13 +45,13 @@ Improving performance and usability for growing datasets.
 ## Phase 4: RBAC & Final Polish
 Securing actions and finishing the interface.
 
-- [~] Task: Role-Based Backend Protection
-    - [ ] Implement `authorize` middleware in backend
-    - [ ] Protect DELETE and PUT routes for Products/Suppliers (Managers only)
-- [ ] Task: Conditional UI Actions
-    - [ ] Implement `RoleGuard` component or logic in frontend
-    - [ ] Hide "Delete" buttons for users with the `store-clerk` role
-- [ ] Task: Final Polish & Asset Audit
+- [x] Task: Role-Based Backend Protection 1be5568
+    - [x] Implement `authorize` middleware in backend
+    - [x] Protect DELETE and PUT routes for Products/Suppliers (Managers only)
+- [x] Task: Conditional UI Actions 1be5568
+    - [x] Implement `RoleGuard` component or logic in frontend
+    - [x] Hide "Delete" buttons for users with the `store-clerk` role
+- [~] Task: Final Polish & Asset Audit
     - [ ] Review all empty states and ensure consistent margins/padding
     - [ ] Final quality audit across all layers
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: RBAC & Polish'
