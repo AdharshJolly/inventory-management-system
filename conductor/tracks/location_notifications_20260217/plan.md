@@ -15,16 +15,16 @@ Establishing the base for physical inventory organization.
 ## Phase 2: Inventory Integration
 Mapping stock to specific physical areas.
 
-- [~] Task: Schema Refactoring (Stock & Transaction)
-    - [ ] Update `Stock` model to include `location` reference
-    - [ ] Update `Transaction` model to include `location` (source/destination)
-- [ ] Task: Refactor Transaction Logic
-    - [ ] Update `createTransaction` controller to handle specific locations
-    - [ ] Ensure stock is updated correctly per product-location pair
-- [ ] Task: UI Updates for Transactions
-    - [ ] Update 'Execute Transaction' form to include a 'Location' searchable dropdown
-    - [ ] Update 'History' table to show location for each movement
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Location Integration'
+- [x] Task: Schema Refactoring (Stock & Transaction)
+    - [x] Update `Stock` model to include `location` reference
+    - [x] Update `Transaction` model to include `location` (source/destination)
+- [x] Task: Refactor Transaction Logic
+    - [x] Update `createTransaction` controller to handle specific locations
+    - [x] Ensure stock is updated correctly per product-location pair
+- [x] Task: UI Updates for Transactions ffad046
+    - [x] Update 'Execute Transaction' form to include a 'Location' searchable dropdown
+    - [x] Update 'History' table to show location for each movement
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Location Integration'
 
 ## Phase 3: Notification Infrastructure
 Building the engine for proactive alerts.
