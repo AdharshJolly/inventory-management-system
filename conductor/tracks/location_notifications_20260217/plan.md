@@ -3,11 +3,11 @@
 ## Phase 1: Location Foundation
 Establishing the base for physical inventory organization.
 
-- [ ] Task: Location Model and CRUD API
-    - [ ] Create `Location` Mongoose model
-    - [ ] Implement backend CRUD controllers and routes for Locations
-    - [ ] Write integration tests for Location API
-- [ ] Task: Location Management UI
+- [x] Task: Location Model and CRUD API 2713412
+    - [x] Create `Location` Mongoose model
+    - [x] Implement backend CRUD controllers and routes for Locations
+    - [x] Write integration tests for Location API
+- [~] Task: Location Management UI
     - [ ] Create 'Locations' page in frontend
     - [ ] Implement Add/Edit/Delete functionality for Locations using the existing Modal pattern
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Location Management'
