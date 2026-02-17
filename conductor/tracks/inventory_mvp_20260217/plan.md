@@ -43,8 +43,8 @@ Implementing the core business logic and data aggregation.
 ## Phase 4: Frontend Development (React & Tailwind)
 Building the user interface to interact with the API.
 
-- [ ] Task: Frontend Scaffolding (React, Vite, Tailwind, Axios)
-    - [ ] Initialize frontend with `bun x create-vite frontend --template react`
+- [~] Task: Frontend Scaffolding (React, Vite, Tailwind, Axios)
+    - [ ] Initialize frontend with `bun x create-vite frontend --template react-ts`
     - [ ] Install dependencies: `axios`, `react-router-dom`, `tailwindcss`, `autoprefixer`, `postcss`, `lucide-react`
     - [ ] Configure Tailwind CSS and folder structure (`src/components/`, `src/pages/`, `src/context/`, `src/api/`, `src/hooks/`)
 - [ ] Task: Auth and State Management
