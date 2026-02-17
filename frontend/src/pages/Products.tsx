@@ -10,6 +10,7 @@ import Modal from '../components/ui/Modal';
 import Pagination from '../components/ui/Pagination';
 import RoleGuard from '../components/auth/RoleGuard';
 import EmptyState from '../components/ui/EmptyState';
+import ConfirmModal from '../components/ui/ConfirmModal';
 import { productSchema, type ProductFormData } from '../schemas';
 import { Plus, Search, Tag, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown, Package } from 'lucide-react';
 
@@ -19,7 +20,9 @@ const Products: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   // Pagination state
@@ -125,6 +128,11 @@ const Products: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const openDeleteModal = (id: string) => {
+    setDeletingProductId(id);
+    setIsDeleteModalOpen(true);
+  };
+
   const onSubmit = async (data: ProductFormData) => {
     setSubmitting(true);
     try {
@@ -145,15 +153,20 @@ const Products: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        await api.delete(`/products/${id}`);
-        toast.success('Product deleted successfully');
-        fetchData();
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || 'Failed to delete product');
-      }
+  const handleDelete = async () => {
+    if (!deletingProductId) return;
+
+    setSubmitting(true);
+    try {
+      await api.delete(`/products/${deletingProductId}`);
+      toast.success('Product deleted successfully');
+      setIsDeleteModalOpen(false);
+      setDeletingProductId(null);
+      fetchData();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete product');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -242,6 +255,15 @@ const Products: React.FC = () => {
         </form>
       </Modal>
 
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Product"
+        message="Are you sure you want to delete this product? This action cannot be undone and will remove all associated stock and transaction history."
+        loading={submitting}
+      />
+
       <div className="flex gap-4 items-center bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <Search className="text-gray-400" size={20} />
         <Input 
@@ -323,7 +345,7 @@ const Products: React.FC = () => {
                               <Edit2 size={18} />
                             </button>
                             <button
-                              onClick={() => handleDelete(p._id)}
+                              onClick={() => openDeleteModal(p._id)}
                               className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                               title="Delete"
                             >

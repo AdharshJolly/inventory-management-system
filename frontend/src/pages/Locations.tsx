@@ -10,6 +10,7 @@ import Modal from '../components/ui/Modal';
 import Pagination from '../components/ui/Pagination';
 import RoleGuard from '../components/auth/RoleGuard';
 import EmptyState from '../components/ui/EmptyState';
+import ConfirmModal from '../components/ui/ConfirmModal';
 import { locationSchema, type LocationFormData } from '../schemas';
 import { Plus, MapPin, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 
@@ -17,7 +18,9 @@ const Locations: React.FC = () => {
   const [locations, setLocations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingLocation, setEditingLocation] = useState<any>(null);
+  const [deletingLocationId, setDeletingLocationId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   // Pagination state
@@ -104,6 +107,11 @@ const Locations: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const openDeleteModal = (id: string) => {
+    setDeletingLocationId(id);
+    setIsDeleteModalOpen(true);
+  };
+
   const onSubmit = async (data: LocationFormData) => {
     setSubmitting(true);
     try {
@@ -124,15 +132,20 @@ const Locations: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this location?')) {
-      try {
-        await api.delete(`/locations/${id}`);
-        toast.success('Location deleted successfully');
-        fetchLocations();
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || 'Failed to delete location');
-      }
+  const handleDelete = async () => {
+    if (!deletingLocationId) return;
+    
+    setSubmitting(true);
+    try {
+      await api.delete(`/locations/${deletingLocationId}`);
+      toast.success('Location deleted successfully');
+      setIsDeleteModalOpen(false);
+      setDeletingLocationId(null);
+      fetchLocations();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete location');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -193,6 +206,15 @@ const Locations: React.FC = () => {
           </div>
         </form>
       </Modal>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Location"
+        message="Are you sure you want to delete this storage location? This action cannot be undone and may affect stock assignments."
+        loading={submitting}
+      />
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
@@ -255,7 +277,7 @@ const Locations: React.FC = () => {
                               <Edit2 size={18} />
                             </button>
                             <button
-                              onClick={() => handleDelete(loc._id)}
+                              onClick={() => openDeleteModal(loc._id)}
                               className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                               title="Delete"
                             >

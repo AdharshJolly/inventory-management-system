@@ -10,6 +10,7 @@ import Modal from '../components/ui/Modal';
 import Pagination from '../components/ui/Pagination';
 import RoleGuard from '../components/auth/RoleGuard';
 import EmptyState from '../components/ui/EmptyState';
+import ConfirmModal from '../components/ui/ConfirmModal';
 import { supplierSchema, type SupplierFormData } from '../schemas';
 import { Plus, User, Mail, Phone, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown, Users } from 'lucide-react';
 
@@ -17,7 +18,9 @@ const Suppliers: React.FC = () => {
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingSupplier, setEditingSupplier] = useState<any>(null);
+  const [deletingSupplierId, setDeletingSupplierId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   // Pagination state
@@ -108,6 +111,11 @@ const Suppliers: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const openDeleteModal = (id: string) => {
+    setDeletingSupplierId(id);
+    setIsDeleteModalOpen(true);
+  };
+
   const onSubmit = async (data: SupplierFormData) => {
     setSubmitting(true);
     try {
@@ -128,15 +136,20 @@ const Suppliers: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this supplier?')) {
-      try {
-        await api.delete(`/suppliers/${id}`);
-        toast.success('Supplier deleted successfully');
-        fetchSuppliers();
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || 'Failed to delete supplier');
-      }
+  const handleDelete = async () => {
+    if (!deletingSupplierId) return;
+
+    setSubmitting(true);
+    try {
+      await api.delete(`/suppliers/${deletingSupplierId}`);
+      toast.success('Supplier deleted successfully');
+      setIsDeleteModalOpen(false);
+      setDeletingSupplierId(null);
+      fetchSuppliers();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete supplier');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -210,6 +223,15 @@ const Suppliers: React.FC = () => {
           </div>
         </form>
       </Modal>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Supplier"
+        message="Are you sure you want to delete this supplier? This action cannot be undone and will remove the reference from associated products."
+        loading={submitting}
+      />
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
@@ -285,7 +307,7 @@ const Suppliers: React.FC = () => {
                               <Edit2 size={18} />
                             </button>
                             <button
-                              onClick={() => handleDelete(s._id)}
+                              onClick={() => openDeleteModal(s._id)}
                               className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                               title="Delete"
                             >
