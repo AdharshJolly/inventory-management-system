@@ -3,6 +3,7 @@ import api from '../api/axios';
 import Table from '../components/ui/Table';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import Skeleton from '../components/ui/Skeleton';
 import { Plus, Search, Tag } from 'lucide-react';
 
 const Products: React.FC = () => {
@@ -51,7 +52,13 @@ const Products: React.FC = () => {
 
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         {loading ? (
-          <p>Loading products...</p>
+          <div className="space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
         ) : (
           <Table headers={['Product', 'SKU', 'Category', 'Price', 'Supplier']}>
             {filteredProducts.map((p) => (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import api from '../api/axios';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
@@ -47,6 +48,8 @@ const TransactionExecution: React.FC = () => {
 
     try {
       await api.post('/transactions', formData);
+      const product = products.find(p => p._id === formData.product);
+      toast.success(`Successfully recorded ${formData.type} transaction for ${product?.name}`);
       setSuccess('Transaction recorded successfully!');
       // Reset form but keep same product selected
       setFormData(prev => ({ ...prev, quantity: 1, notes: '' }));
@@ -54,7 +57,9 @@ const TransactionExecution: React.FC = () => {
       // Navigate to history after a short delay
       setTimeout(() => navigate('/history'), 1500);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to execute transaction.');
+      const message = err.response?.data?.message || 'Failed to execute transaction.';
+      setError(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }

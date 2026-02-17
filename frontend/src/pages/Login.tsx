@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
@@ -23,9 +24,12 @@ const Login: React.FC = () => {
     try {
       const response = await api.post('/auth/login', { email, password });
       login(response.data.token, response.data.user);
+      toast.success(`Welcome back, ${response.data.user.name}!`);
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      const message = err.response?.data?.message || 'Login failed. Please check your credentials.';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

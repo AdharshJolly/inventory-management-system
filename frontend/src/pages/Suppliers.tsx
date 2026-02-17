@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
 import Table from '../components/ui/Table';
 import Button from '../components/ui/Button';
+import Skeleton from '../components/ui/Skeleton';
 import { Plus, User, Mail, Phone } from 'lucide-react';
 
 const Suppliers: React.FC = () => {
@@ -34,7 +35,12 @@ const Suppliers: React.FC = () => {
 
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         {loading ? (
-          <p>Loading suppliers...</p>
+          <div className="space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
         ) : (
           <Table headers={['Name', 'Contact', 'Email', 'Phone']}>
             {suppliers.map((s) => (

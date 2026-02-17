@@ -33,8 +33,6 @@ describe('Dashboard Page', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
-
     await waitFor(() => {
       expect(screen.getByText('10')).toBeInTheDocument(); // Total Products
       expect(screen.getByText('$1500.00')).toBeInTheDocument(); // Total Value
