@@ -8,13 +8,13 @@ Building the core environment and the REST API for the Inventory Management Syst
     - [x] Install essential dependencies: `express`, `mongoose`, `cors`, `dotenv`, `jsonwebtoken`, `bcryptjs`
     - [x] Configure environment variables (`.env`) for MongoDB and JWT secret
     - [x] Set up basic Express server structure (`server.js`, `routes/`, `models/`, `controllers/`, `middleware/`, `config/`)
-- [x] Task: MongoDB Models (Supplier, Product, Transaction, Stock, User) a961d5f
+- [x] Task: MongoDB Models (Supplier, Product, Transaction, Stock, User) 9783181
     - [x] Write Tests: Model validation tests
     - [x] Implement Feature: Create Mongoose schemas for Supplier, Product, Transaction, Stock, and User
-- [ ] Task: Authentication Foundation (JWT and Middlewares)
-    - [ ] Write Tests: Auth controller and middleware tests
-    - [ ] Implement Feature: Create `User` controller for Register/Login
-    - [ ] Implement Feature: Create `authMiddleware` to protect routes
+- [x] Task: Authentication Foundation (JWT and Middlewares) cff9ba3
+    - [x] Write Tests: Auth controller and middleware tests
+    - [x] Implement Feature: Create `User` controller for Register/Login
+    - [x] Implement Feature: Create `authMiddleware` to protect routes
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation and Initial Backend' (Protocol in workflow.md)
 
 ## Phase 2: CRUD APIs (Suppliers & Products)
