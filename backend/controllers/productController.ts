@@ -6,8 +6,26 @@ import Product from '../models/Product';
 // @access  Private
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find().populate('supplier', 'name email');
-    res.status(200).json(products);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 100; // Default to a large number if not specified
+    const skip = (page - 1) * limit;
+
+    const totalDocs = await Product.countDocuments();
+    const products = await Product.find()
+      .populate('supplier', 'name email')
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      data: products,
+      pagination: {
+        totalDocs,
+        totalPages: Math.ceil(totalDocs / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

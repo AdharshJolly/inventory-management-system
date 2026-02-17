@@ -6,8 +6,25 @@ import Supplier from '../models/Supplier';
 // @access  Private
 export const getSuppliers = async (req: Request, res: Response) => {
   try {
-    const suppliers = await Supplier.find();
-    res.status(200).json(suppliers);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 100;
+    const skip = (page - 1) * limit;
+
+    const totalDocs = await Supplier.countDocuments();
+    const suppliers = await Supplier.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ name: 1 });
+
+    res.status(200).json({
+      data: suppliers,
+      pagination: {
+        totalDocs,
+        totalPages: Math.ceil(totalDocs / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

@@ -8,11 +8,27 @@ import Stock from '../models/Stock';
 // @access  Private
 export const getTransactions = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 100;
+    const skip = (page - 1) * limit;
+
+    const totalDocs = await Transaction.countDocuments();
     const transactions = await Transaction.find()
       .populate('product', 'name sku')
       .populate('user', 'name')
+      .skip(skip)
+      .limit(limit)
       .sort({ createdAt: -1 });
-    res.status(200).json(transactions);
+
+    res.status(200).json({
+      data: transactions,
+      pagination: {
+        totalDocs,
+        totalPages: Math.ceil(totalDocs / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
