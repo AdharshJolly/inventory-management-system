@@ -1,29 +1,68 @@
 import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import toast from 'react-hot-toast';
 import api from '../api/axios';
 import Table from '../components/ui/Table';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Skeleton from '../components/ui/Skeleton';
+import Modal from '../components/ui/Modal';
+import { productSchema, ProductFormData } from '../schemas';
 import { Plus, Search, Tag } from 'lucide-react';
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [suppliers, setSuppliers] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+  });
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [productsRes, suppliersRes] = await Promise.all([
+        api.get('/products'),
+        api.get('/suppliers'),
+      ]);
+      setProducts(productsRes.data);
+      setSuppliers(suppliersRes.data);
+    } catch (err) {
+      console.error('Failed to fetch data', err);
+      toast.error('Failed to load products or suppliers');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await api.get('/products');
-        setProducts(response.data);
-      } catch (err) {
-        console.error('Failed to fetch products', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
+    fetchData();
   }, []);
+
+  const onSubmit = async (data: ProductFormData) => {
+    setSubmitting(true);
+    try {
+      await api.post('/products', data);
+      toast.success('Product added successfully');
+      setIsModalOpen(false);
+      reset();
+      fetchData();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to add product');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -34,11 +73,77 @@ const Products: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Product Catalog</h1>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
           <Plus size={18} />
           Add Product
         </Button>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Add New Product"
+      >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input
+            label="SKU"
+            placeholder="e.g. ELEC-001"
+            {...register('sku')}
+            error={errors.sku?.message}
+          />
+          <Input
+            label="Product Name"
+            placeholder="e.g. Wireless Mouse"
+            {...register('name')}
+            error={errors.name?.message}
+          />
+          <Input
+            label="Category"
+            placeholder="e.g. Electronics"
+            {...register('category')}
+            error={errors.category?.message}
+          />
+          <Input
+            label="Base Price"
+            type="number"
+            step="0.01"
+            placeholder="0.00"
+            {...register('basePrice')}
+            error={errors.basePrice?.message}
+          />
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Supplier</label>
+            <select
+              {...register('supplier')}
+              className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                errors.supplier ? 'border-red-500' : 'border-gray-300'
+              }`}
+            >
+              <option value="">Select a supplier</option>
+              {suppliers.map((s) => (
+                <option key={s._id} value={s._id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+            {errors.supplier && (
+              <p className="mt-1 text-xs text-red-500">{errors.supplier.message}</p>
+            )}
+          </div>
+          <div className="flex justify-end gap-3 mt-6">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" loading={submitting}>
+              Add Product
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       <div className="flex gap-4 items-center bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <Search className="text-gray-400" size={20} />
