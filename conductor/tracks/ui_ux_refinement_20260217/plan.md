@@ -22,7 +22,7 @@ Ensuring data integrity and providing better user guidance.
 - [x] Task: Modal-Based Workflows a84a9b9
     - [x] Create a reusable `Modal` component
     - [x] Refactor "Add Product" and "Add Supplier" to open in modals instead of separate paths
-- [x] Task: Edit and Delete Functionality
+- [x] Task: Edit and Delete Functionality 2feba7e
     - [x] Add "Edit" and "Delete" buttons to Product and Supplier tables
     - [x] Implement Delete confirmation dialogs
     - [x] Implement Edit modals populated with existing data for both entities
@@ -31,7 +31,7 @@ Ensuring data integrity and providing better user guidance.
 ## Phase 3: Advanced Data & Pagination
 Improving performance and usability for growing datasets.
 
-- [ ] Task: Backend Pagination Support
+- [~] Task: Backend Pagination Support
     - [ ] Update Product and Transaction controllers to support `page` and `limit`
     - [ ] Update API responses to include `totalDocs`, `totalPages`, and `currentPage`
 - [ ] Task: Frontend Pagination & Sorting
