@@ -2,5 +2,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Location Management & User Alerts Center**
+- [x] **Track: Location Management & User Alerts Center**
   *Link: [./tracks/location_notifications_20260217/](./tracks/location_notifications_20260217/)*
