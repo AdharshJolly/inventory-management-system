@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import Suppliers from './pages/Suppliers'
 import Locations from './pages/Locations'
+import Profile from './pages/Profile'
 import TransactionHistory from './pages/TransactionHistory'
 import TransactionExecution from './pages/TransactionExecution'
 import Login from './pages/Login'
@@ -35,6 +36,12 @@ function App() {
         <Route path="/" element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         } />
 
