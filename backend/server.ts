@@ -19,11 +19,13 @@ import authRoutes from './routes/authRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import productRoutes from './routes/productRoutes';
 import transactionRoutes from './routes/transactionRoutes';
+import dashboardRoutes from './routes/dashboardRoutes';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
