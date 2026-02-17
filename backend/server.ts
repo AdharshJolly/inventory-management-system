@@ -18,10 +18,12 @@ app.use(cors());
 import authRoutes from './routes/authRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import productRoutes from './routes/productRoutes';
+import transactionRoutes from './routes/transactionRoutes';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
