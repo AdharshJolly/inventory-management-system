@@ -31,13 +31,16 @@ Ensuring data integrity and providing better user guidance.
 ## Phase 3: Advanced Data & Pagination
 Improving performance and usability for growing datasets.
 
-- [~] Task: Backend Pagination Support
-    - [ ] Update Product and Transaction controllers to support `page` and `limit`
-    - [ ] Update API responses to include `totalDocs`, `totalPages`, and `currentPage`
-- [ ] Task: Frontend Pagination & Sorting
-    - [ ] Implement a `Pagination` component for tables
-    - [ ] Add "Sort by" headers to the Product and History tables
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Pagination & Sorting'
+- [x] Task: Backend Pagination Support 1e0d1e5
+    - [x] Update Product and Transaction controllers to support `page` and `limit`
+    - [x] Update API responses to include `totalDocs`, `totalPages`, and `currentPage`
+- [x] Task: Frontend Pagination & Sorting 1e0d1e5
+    - [x] Implement a `Pagination` component for tables
+    - [x] Add "Sort by" headers to the Product and History tables
+- [x] Task: Searchable Select for Transactions 7510922
+    - [x] Create reusable `Combobox` component
+    - [x] Integrate `Combobox` into Transaction Execution page for product selection
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Pagination & Sorting'
 
 ## Phase 4: RBAC & Final Polish
 Securing actions and finishing the interface.
