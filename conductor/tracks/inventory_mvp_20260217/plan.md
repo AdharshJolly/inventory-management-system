@@ -31,11 +31,11 @@ Building the RESTful endpoints for managing core entities.
 ## Phase 3: Inventory Logic and Dashboard API
 Implementing the core business logic and data aggregation.
 
-- [ ] Task: Inventory Transaction API (IN/OUT)
-    - [ ] Write Tests: Transaction logic tests (including atomic stock updates)
-    - [ ] Implement Feature: Create transaction controller and routes
-    - [ ] Implement Feature: Add logic to update `Current Quantity` in the `Stock` entity after each transaction
-- [ ] Task: Dashboard and Analytics API
+- [x] Task: Inventory Transaction API (IN/OUT) 476d5f3
+    - [x] Write Tests: Transaction logic tests (including atomic stock updates)
+    - [x] Implement Feature: Create transaction controller and routes
+    - [x] Implement Feature: Add logic to update `Current Quantity` in the `Stock` entity after each transaction
+- [~] Task: Dashboard and Analytics API
     - [ ] Write Tests: Dashboard aggregation tests
     - [ ] Implement Feature: Create API endpoint for Dashboard stats (Total products, Stock value, Low stock alerts)
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Inventory Logic and Dashboard API' (Protocol in workflow.md)
