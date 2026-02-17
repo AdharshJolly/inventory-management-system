@@ -5,16 +5,19 @@ import { afterAll, beforeAll, beforeEach } from 'bun:test';
 let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
-  mongo = await MongoMemoryServer.create();
-  const uri = mongo.getUri();
-  await mongoose.connect(uri);
+  if (mongoose.connection.readyState === 0) {
+    mongo = await MongoMemoryServer.create();
+    const uri = mongo.getUri();
+    await mongoose.connect(uri);
+  }
 });
 
 afterAll(async () => {
-  if (mongo) {
+  // Only stop if this was the one that started it
+  if (mongo && mongoose.connection.readyState !== 0) {
     await mongo.stop();
+    await mongoose.connection.close();
   }
-  await mongoose.connection.close();
 });
 
 beforeEach(async () => {
