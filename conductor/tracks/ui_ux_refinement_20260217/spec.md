@@ -7,6 +7,7 @@ This track aims to elevate the Inventory Management System from a functional pro
 
 ### 1. UI/UX Refinement
 - **Global Notifications:** Implement a toast system to provide immediate, non-intrusive feedback for user actions (e.g., "Transaction Recorded", "Product Updated").
+- **Full CRUD Workflows:** Implement Edit and Delete capabilities for Products and Suppliers, using modal dialogs for editing and confirmation prompts for deletion.
 - **Modal-Based CRUD:** Transition from page-based forms to centered modal dialogs for adding and editing entities, maintaining user context.
 - **Skeleton States:** Replace generic "Loading..." text with animated skeleton loaders that mimic the actual layout structure.
 - **Improved Empty States:** Design and implement clear, helpful empty states for tables when no data is found or filters return no results.

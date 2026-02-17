@@ -15,14 +15,18 @@ Setting up the foundations for a smoother user experience.
 ## Phase 2: Form & Validation Overhaul
 Ensuring data integrity and providing better user guidance.
 
-- [ ] Task: Schema-Based Validation
-    - [ ] Install `zod`, `react-hook-form`, and `@hookform/resolvers`
-    - [ ] Define Zod schemas for Product and Supplier entities
-    - [ ] Refactor Product and Supplier "Add" forms to use React Hook Form with real-time validation
-- [ ] Task: Modal-Based Workflows
-    - [ ] Create a reusable `Modal` component
-    - [ ] Refactor "Add Product" and "Add Supplier" to open in modals instead of separate paths
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Validation & Modals'
+- [x] Task: Schema-Based Validation a84a9b9
+    - [x] Install `zod`, `react-hook-form`, and `@hookform/resolvers`
+    - [x] Define Zod schemas for Product and Supplier entities
+    - [x] Refactor Product and Supplier "Add" forms to use React Hook Form with real-time validation
+- [x] Task: Modal-Based Workflows a84a9b9
+    - [x] Create a reusable `Modal` component
+    - [x] Refactor "Add Product" and "Add Supplier" to open in modals instead of separate paths
+- [x] Task: Edit and Delete Functionality
+    - [x] Add "Edit" and "Delete" buttons to Product and Supplier tables
+    - [x] Implement Delete confirmation dialogs
+    - [x] Implement Edit modals populated with existing data for both entities
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Validation & Modals' a84a9b9
 
 ## Phase 3: Advanced Data & Pagination
 Improving performance and usability for growing datasets.

@@ -9,7 +9,7 @@ import Input from '../components/ui/Input';
 import Skeleton from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
 import { productSchema, type ProductFormData } from '../schemas';
-import { Plus, Search, Tag } from 'lucide-react';
+import { Plus, Search, Tag, Edit2, Trash2 } from 'lucide-react';
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -17,12 +17,14 @@ const Products: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema) as any,
@@ -57,18 +59,52 @@ const Products: React.FC = () => {
     fetchData();
   }, []);
 
+  const openAddModal = () => {
+    setEditingProduct(null);
+    reset();
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (product: any) => {
+    setEditingProduct(product);
+    setValue('sku', product.sku);
+    setValue('name', product.name);
+    setValue('category', product.category);
+    setValue('description', product.description || '');
+    setValue('basePrice', product.basePrice);
+    setValue('supplier', product.supplier?._id || product.supplier || '');
+    setIsModalOpen(true);
+  };
+
   const onSubmit = async (data: ProductFormData) => {
     setSubmitting(true);
     try {
-      await api.post('/products', data);
-      toast.success('Product added successfully');
+      if (editingProduct) {
+        await api.put(`/products/${editingProduct._id}`, data);
+        toast.success('Product updated successfully');
+      } else {
+        await api.post('/products', data);
+        toast.success('Product added successfully');
+      }
       setIsModalOpen(false);
       reset();
       fetchData();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to add product');
+      toast.error(err.response?.data?.message || `Failed to ${editingProduct ? 'update' : 'add'} product`);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      try {
+        await api.delete(`/products/${id}`);
+        toast.success('Product deleted successfully');
+        fetchData();
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || 'Failed to delete product');
+      }
     }
   };
 
@@ -81,7 +117,7 @@ const Products: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Product Catalog</h1>
-        <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
+        <Button className="gap-2" onClick={openAddModal}>
           <Plus size={18} />
           Add Product
         </Button>
@@ -90,7 +126,7 @@ const Products: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Add New Product"
+        title={editingProduct ? 'Edit Product' : 'Add New Product'}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
@@ -147,7 +183,7 @@ const Products: React.FC = () => {
               Cancel
             </Button>
             <Button type="submit" loading={submitting}>
-              Add Product
+              {editingProduct ? 'Save Changes' : 'Add Product'}
             </Button>
           </div>
         </form>
@@ -173,7 +209,7 @@ const Products: React.FC = () => {
             <Skeleton className="h-12 w-full" />
           </div>
         ) : (
-          <Table headers={['Product', 'SKU', 'Category', 'Price', 'Supplier']}>
+          <Table headers={['Product', 'SKU', 'Category', 'Price', 'Supplier', 'Actions']}>
             {filteredProducts.map((p) => (
               <tr key={p._id}>
                 <td className="px-6 py-4 font-medium text-gray-900">{p.name}</td>
@@ -186,6 +222,24 @@ const Products: React.FC = () => {
                 </td>
                 <td className="px-6 py-4 text-gray-900 font-semibold">${p.basePrice.toFixed(2)}</td>
                 <td className="px-6 py-4 text-blue-600">{p.supplier?.name}</td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEditModal(p)}
+                      className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                      title="Edit"
+                    >
+                      <Edit2 size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(p._id)}
+                      className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </Table>

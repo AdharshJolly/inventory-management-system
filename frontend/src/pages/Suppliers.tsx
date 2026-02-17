@@ -9,18 +9,20 @@ import Input from '../components/ui/Input';
 import Skeleton from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
 import { supplierSchema, type SupplierFormData } from '../schemas';
-import { Plus, User, Mail, Phone } from 'lucide-react';
+import { Plus, User, Mail, Phone, Edit2, Trash2 } from 'lucide-react';
 
 const Suppliers: React.FC = () => {
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingSupplier, setEditingSupplier] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<SupplierFormData>({
     resolver: zodResolver(supplierSchema) as any,
@@ -50,18 +52,51 @@ const Suppliers: React.FC = () => {
     fetchSuppliers();
   }, []);
 
+  const openAddModal = () => {
+    setEditingSupplier(null);
+    reset();
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (supplier: any) => {
+    setEditingSupplier(supplier);
+    setValue('name', supplier.name);
+    setValue('contactPerson', supplier.contactPerson);
+    setValue('email', supplier.email);
+    setValue('phone', supplier.phone);
+    setValue('address', supplier.address);
+    setIsModalOpen(true);
+  };
+
   const onSubmit = async (data: SupplierFormData) => {
     setSubmitting(true);
     try {
-      await api.post('/suppliers', data);
-      toast.success('Supplier added successfully');
+      if (editingSupplier) {
+        await api.put(`/suppliers/${editingSupplier._id}`, data);
+        toast.success('Supplier updated successfully');
+      } else {
+        await api.post('/suppliers', data);
+        toast.success('Supplier added successfully');
+      }
       setIsModalOpen(false);
       reset();
       fetchSuppliers();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to add supplier');
+      toast.error(err.response?.data?.message || `Failed to ${editingSupplier ? 'update' : 'add'} supplier`);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm('Are you sure you want to delete this supplier?')) {
+      try {
+        await api.delete(`/suppliers/${id}`);
+        toast.success('Supplier deleted successfully');
+        fetchSuppliers();
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || 'Failed to delete supplier');
+      }
     }
   };
 
@@ -69,7 +104,7 @@ const Suppliers: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Suppliers</h1>
-        <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
+        <Button className="gap-2" onClick={openAddModal}>
           <Plus size={18} />
           Add Supplier
         </Button>
@@ -78,7 +113,7 @@ const Suppliers: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Add New Supplier"
+        title={editingSupplier ? 'Edit Supplier' : 'Add New Supplier'}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
@@ -121,7 +156,7 @@ const Suppliers: React.FC = () => {
               Cancel
             </Button>
             <Button type="submit" loading={submitting}>
-              Add Supplier
+              {editingSupplier ? 'Save Changes' : 'Add Supplier'}
             </Button>
           </div>
         </form>
@@ -136,7 +171,7 @@ const Suppliers: React.FC = () => {
             <Skeleton className="h-12 w-full" />
           </div>
         ) : (
-          <Table headers={['Name', 'Contact', 'Email', 'Phone']}>
+          <Table headers={['Name', 'Contact', 'Email', 'Phone', 'Actions']}>
             {suppliers.map((s) => (
               <tr key={s._id}>
                 <td className="px-6 py-4 font-medium text-gray-900">{s.name}</td>
@@ -154,6 +189,24 @@ const Suppliers: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Phone size={14} />
                     {s.phone}
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEditModal(s)}
+                      className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                      title="Edit"
+                    >
+                      <Edit2 size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(s._id)}
+                      className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </td>
               </tr>
