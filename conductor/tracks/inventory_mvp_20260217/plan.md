@@ -23,9 +23,9 @@ Building the RESTful endpoints for managing core entities.
 - [x] Task: Supplier API (CRUD) 902b875
     - [x] Write Tests: Supplier controller unit and integration tests
     - [x] Implement Feature: Create routes and controller for Supplier CRUD
-- [~] Task: Product API (CRUD)
-    - [ ] Write Tests: Product controller unit and integration tests
-    - [ ] Implement Feature: Create routes and controller for Product CRUD (must reference a Supplier)
+- [x] Task: Product API (CRUD) 73f441b
+    - [x] Write Tests: Product controller unit and integration tests
+    - [x] Implement Feature: Create routes and controller for Product CRUD (must reference a Supplier)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: CRUD APIs (Suppliers & Products)' (Protocol in workflow.md)
 
 ## Phase 3: Inventory Logic and Dashboard API
