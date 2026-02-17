@@ -28,7 +28,7 @@ Building the RESTful endpoints for managing core entities.
     - [x] Implement Feature: Create routes and controller for Product CRUD (must reference a Supplier)
 - [x] Task: Conductor - User Manual Verification 'Phase 2: CRUD APIs (Suppliers & Products)' (Protocol in workflow.md) 70f1718
 
-## Phase 3: Inventory Logic and Dashboard API
+## Phase 3: Inventory Logic and Dashboard API [checkpoint: 1cf516d]
 Implementing the core business logic and data aggregation.
 
 - [x] Task: Inventory Transaction API (IN/OUT) 476d5f3
@@ -38,7 +38,7 @@ Implementing the core business logic and data aggregation.
 - [x] Task: Dashboard and Analytics API 8290111
     - [x] Write Tests: Dashboard aggregation tests
     - [x] Implement Feature: Create API endpoint for Dashboard stats (Total products, Stock value, Low stock alerts)
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Inventory Logic and Dashboard API' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Inventory Logic and Dashboard API' (Protocol in workflow.md) 1cf516d
 
 ## Phase 4: Frontend Development (React & Tailwind)
 Building the user interface to interact with the API.
