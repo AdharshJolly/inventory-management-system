@@ -25,10 +25,11 @@ const TransactionExecution: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get('/products');
-        setProducts(response.data);
-        if (response.data.length > 0) {
-          setFormData(prev => ({ ...prev, product: response.data[0]._id }));
+        const response = await api.get('/products?limit=1000');
+        const productList = response.data.data || [];
+        setProducts(productList);
+        if (productList.length > 0) {
+          setFormData(prev => ({ ...prev, product: productList[0]._id }));
         }
       } catch (err) {
         console.error('Failed to fetch products', err);

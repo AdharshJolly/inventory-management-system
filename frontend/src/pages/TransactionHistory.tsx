@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-import Table from '../components/ui/Table';
 import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
 import Pagination from '../components/ui/Pagination';
