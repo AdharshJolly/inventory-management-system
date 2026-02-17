@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Transaction, { TransactionType } from '../models/Transaction';
 import Stock from '../models/Stock';
+import Product from '../models/Product';
 
 // @desc    Get all transactions
 // @route   GET /api/transactions
@@ -15,6 +16,7 @@ export const getTransactions = async (req: Request, res: Response) => {
     const totalDocs = await Transaction.countDocuments();
     const transactions = await Transaction.find()
       .populate('product', 'name sku')
+      .populate('location', 'name')
       .populate('user', 'name')
       .skip(skip)
       .limit(limit)
@@ -38,63 +40,86 @@ export const getTransactions = async (req: Request, res: Response) => {
 // @route   POST /api/transactions
 // @access  Private
 export const createTransaction = async (req: any, res: Response) => {
+  const { product, location, type, quantity, notes } = req.body;
+
+  // Use a session if not in test env (unless replica set is configured)
   const isTest = process.env.NODE_ENV === 'test';
   
   if (isTest) {
-    // Non-transactional path for testing (unless replica set is configured)
     try {
-      const { product, type, quantity, notes } = req.body;
-      let stock = await Stock.findOne({ product });
+      // 1. Verify product exists
+      const productDoc = await Product.findById(product);
+      if (!productDoc) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+
+      // 2. Find or create stock for this product-location pair
+      let stock = await Stock.findOne({ product, location });
+
       if (!stock) {
-        stock = new Stock({ product, currentQuantity: 0 });
+        if (type === TransactionType.OUT) {
+          return res.status(400).json({ message: 'Cannot record OUT transaction: No stock at this location' });
+        }
+        stock = new Stock({ product, location, currentQuantity: 0 });
       }
-      if (type === TransactionType.OUT && stock.currentQuantity < quantity) {
-        res.status(400).json({ message: 'Insufficient stock for this transaction' });
-        return;
-      }
+
+      // 3. Update stock quantity
       if (type === TransactionType.IN) {
         stock.currentQuantity += Number(quantity);
       } else {
+        if (stock.currentQuantity < quantity) {
+          return res.status(400).json({ message: 'Insufficient stock at this location' });
+        }
         stock.currentQuantity -= Number(quantity);
       }
+
       await stock.save();
+
+      // 4. Create transaction
       const transaction = await Transaction.create({
         product,
+        location,
         type,
         quantity,
         user: req.user._id,
         notes
       });
-      res.status(201).json(transaction);
+
+      return res.status(201).json(transaction);
     } catch (error: any) {
-      res.status(500).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
-    return;
   }
 
+  // Production path with Transactions
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const { product, type, quantity, notes } = req.body;
-
-    // 1. Find the stock record
-    let stock = await Stock.findOne({ product }).session(session);
-
-    // If stock doesn't exist, create it (mainly for initial IN transactions)
-    if (!stock) {
-      stock = new Stock({ product, currentQuantity: 0 });
+    const productDoc = await Product.findById(product).session(session);
+    if (!productDoc) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: 'Product not found' });
     }
 
-    // 2. Validate OUT transaction
+    let stock = await Stock.findOne({ product, location }).session(session);
+
+    if (!stock) {
+      if (type === TransactionType.OUT) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({ message: 'Cannot record OUT transaction: No stock at this location' });
+      }
+      stock = new Stock({ product, location, currentQuantity: 0 });
+    }
+
     if (type === TransactionType.OUT && stock.currentQuantity < quantity) {
       await session.abortTransaction();
       session.endSession();
-      res.status(400).json({ message: 'Insufficient stock for this transaction' });
-      return;
+      return res.status(400).json({ message: 'Insufficient stock at this location' });
     }
 
-    // 3. Update stock quantity
     if (type === TransactionType.IN) {
       stock.currentQuantity += Number(quantity);
     } else {
@@ -103,9 +128,9 @@ export const createTransaction = async (req: any, res: Response) => {
 
     await stock.save({ session });
 
-    // 4. Create transaction record
     const transaction = await Transaction.create([{
       product,
+      location,
       type,
       quantity,
       user: req.user._id,
@@ -128,7 +153,9 @@ export const createTransaction = async (req: any, res: Response) => {
 // @access  Private
 export const getStocks = async (req: Request, res: Response) => {
   try {
-    const stocks = await Stock.find().populate('product', 'name sku basePrice');
+    const stocks = await Stock.find()
+      .populate('product', 'name sku basePrice')
+      .populate('location', 'name');
     res.status(200).json(stocks);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

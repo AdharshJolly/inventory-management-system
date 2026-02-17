@@ -5,6 +5,7 @@ import Supplier from '../models/Supplier';
 import Product from '../models/Product';
 import User from '../models/User';
 import Stock from '../models/Stock';
+import Location from '../models/Location';
 import Transaction, { TransactionType } from '../models/Transaction';
 
 describe('Mongoose Models', () => {
@@ -80,14 +81,15 @@ describe('Mongoose Models', () => {
     expect(isMatch).toBe(true);
   });
 
-  it('should create valid stock for a product', async () => {
+  it('should create valid stock for a product-location pair', async () => {
     const supplier = await new Supplier({ name: 'Test Supplier' }).save();
+    const location = await new Location({ name: 'Warehouse A' }).save();
     const product = await new Product({ sku: 'P1', name: 'P1', supplier: supplier._id }).save();
     const stockData = {
       product: product._id,
+      location: location._id,
       currentQuantity: 100,
-      minLevel: 10,
-      location: 'Warehouse A'
+      minLevel: 10
     };
     const stock = new Stock(stockData);
     const savedStock = await stock.save();
@@ -98,9 +100,11 @@ describe('Mongoose Models', () => {
   it('should create a valid transaction', async () => {
     const user = await new User({ name: 'User', email: 'u@e.com', password: 'password' }).save();
     const supplier = await new Supplier({ name: 'S' }).save();
+    const location = await new Location({ name: 'Loc' }).save();
     const product = await new Product({ sku: 'P2', name: 'P2', supplier: supplier._id }).save();
     const transactionData = {
       product: product._id,
+      location: location._id,
       type: TransactionType.IN,
       quantity: 50,
       user: user._id,

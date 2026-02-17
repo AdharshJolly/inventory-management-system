@@ -6,6 +6,7 @@ import User from '../models/User';
 import Supplier from '../models/Supplier';
 import Product from '../models/Product';
 import Stock from '../models/Stock';
+import Location from '../models/Location';
 
 describe('Dashboard API', () => {
   let token: string;
@@ -30,18 +31,19 @@ describe('Dashboard API', () => {
 
     // Setup Data
     const supplier = await Supplier.create({ name: 'Dash Supplier' });
-    
+    const location = await Location.create({ name: 'Warehouse X', type: 'Warehouse' });
+
     // Product 1: In stock, above min
     const p1 = await Product.create({ sku: 'P1', name: 'Product 1', basePrice: 10, supplier: supplier._id });
-    await Stock.create({ product: p1._id, currentQuantity: 20, minLevel: 5 });
+    await Stock.create({ product: p1._id, location: location._id, currentQuantity: 20, minLevel: 5 });
 
     // Product 2: Low stock
     const p2 = await Product.create({ sku: 'P2', name: 'Product 2', basePrice: 20, supplier: supplier._id });
-    await Stock.create({ product: p2._id, currentQuantity: 2, minLevel: 10 });
+    await Stock.create({ product: p2._id, location: location._id, currentQuantity: 2, minLevel: 10 });
 
     // Product 3: Out of stock
     const p3 = await Product.create({ sku: 'P3', name: 'Product 3', basePrice: 50, supplier: supplier._id });
-    await Stock.create({ product: p3._id, currentQuantity: 0, minLevel: 1 });
+    await Stock.create({ product: p3._id, location: location._id, currentQuantity: 0, minLevel: 1 });
   });
 
   describe('GET /api/dashboard/stats', () => {
@@ -63,6 +65,7 @@ describe('Dashboard API', () => {
       const lowStockSkus = res.body.lowStockAlerts.map((item: any) => item.product.sku);
       expect(lowStockSkus).toContain('P2');
       expect(lowStockSkus).toContain('P3');
+      expect(res.body.lowStockAlerts[0].location.name).toBe('Warehouse X');
     });
   });
 });
