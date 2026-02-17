@@ -6,7 +6,7 @@ import {
   updateSupplier,
   deleteSupplier
 } from '../controllers/supplierController';
-import { protect } from '../middleware/authMiddleware';
+import { protect, authorize } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -15,11 +15,11 @@ router.use(protect);
 
 router.route('/')
   .get(getSuppliers)
-  .post(createSupplier);
+  .post(authorize('warehouse-manager'), createSupplier);
 
 router.route('/:id')
   .get(getSupplier)
-  .put(updateSupplier)
-  .delete(deleteSupplier);
+  .put(authorize('warehouse-manager'), updateSupplier)
+  .delete(authorize('warehouse-manager'), deleteSupplier);
 
 export default router;

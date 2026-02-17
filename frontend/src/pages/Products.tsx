@@ -8,6 +8,7 @@ import Input from '../components/ui/Input';
 import Skeleton from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
 import Pagination from '../components/ui/Pagination';
+import RoleGuard from '../components/auth/RoleGuard';
 import { productSchema, type ProductFormData } from '../schemas';
 import { Plus, Search, Tag, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 
@@ -166,10 +167,12 @@ const Products: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Product Catalog</h1>
-        <Button className="gap-2" onClick={openAddModal}>
-          <Plus size={18} />
-          Add Product
-        </Button>
+        <RoleGuard allowedRoles={['warehouse-manager']}>
+          <Button className="gap-2" onClick={openAddModal}>
+            <Plus size={18} />
+            Add Product
+          </Button>
+        </RoleGuard>
       </div>
 
       <Modal
@@ -276,7 +279,9 @@ const Products: React.FC = () => {
                       <div className="flex items-center">Price <SortIcon column="basePrice" /></div>
                     </th>
                     <th className="px-6 py-3 font-semibold">Supplier</th>
-                    <th className="px-6 py-3 font-semibold text-right">Actions</th>
+                    <RoleGuard allowedRoles={['warehouse-manager']}>
+                      <th className="px-6 py-3 font-semibold text-right">Actions</th>
+                    </RoleGuard>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
@@ -292,24 +297,26 @@ const Products: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 text-gray-900 font-semibold">${p.basePrice.toFixed(2)}</td>
                       <td className="px-6 py-4 text-blue-600">{p.supplier?.name}</td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEditModal(p)}
-                            className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Edit"
-                          >
-                            <Edit2 size={18} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(p._id)}
-                            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
-                      </td>
+                      <RoleGuard allowedRoles={['warehouse-manager']}>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => openEditModal(p)}
+                              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <Edit2 size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(p._id)}
+                              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </RoleGuard>
                     </tr>
                   ))}
                 </tbody>

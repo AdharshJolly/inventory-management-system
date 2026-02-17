@@ -149,10 +149,12 @@ const Suppliers: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Suppliers</h1>
-        <Button className="gap-2" onClick={openAddModal}>
-          <Plus size={18} />
-          Add Supplier
-        </Button>
+        <RoleGuard allowedRoles={['warehouse-manager']}>
+          <Button className="gap-2" onClick={openAddModal}>
+            <Plus size={18} />
+            Add Supplier
+          </Button>
+        </RoleGuard>
       </div>
 
       <Modal
@@ -229,7 +231,9 @@ const Suppliers: React.FC = () => {
                     </th>
                     <th className="px-6 py-3 font-semibold">Email</th>
                     <th className="px-6 py-3 font-semibold">Phone</th>
-                    <th className="px-6 py-3 font-semibold text-right">Actions</th>
+                    <RoleGuard allowedRoles={['warehouse-manager']}>
+                      <th className="px-6 py-3 font-semibold text-right">Actions</th>
+                    </RoleGuard>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
@@ -254,24 +258,26 @@ const Suppliers: React.FC = () => {
                           {s.phone}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEditModal(s)}
-                            className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Edit"
-                          >
-                            <Edit2 size={18} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(s._id)}
-                            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
-                      </td>
+                      <RoleGuard allowedRoles={['warehouse-manager']}>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => openEditModal(s)}
+                              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <Edit2 size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(s._id)}
+                              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </RoleGuard>
                     </tr>
                   ))}
                 </tbody>

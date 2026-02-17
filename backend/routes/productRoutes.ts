@@ -6,7 +6,7 @@ import {
   updateProduct,
   deleteProduct
 } from '../controllers/productController';
-import { protect } from '../middleware/authMiddleware';
+import { protect, authorize } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -15,11 +15,11 @@ router.use(protect);
 
 router.route('/')
   .get(getProducts)
-  .post(createProduct);
+  .post(authorize('warehouse-manager'), createProduct);
 
 router.route('/:id')
   .get(getProduct)
-  .put(updateProduct)
-  .delete(deleteProduct);
+  .put(authorize('warehouse-manager'), updateProduct)
+  .delete(authorize('warehouse-manager'), deleteProduct);
 
 export default router;
