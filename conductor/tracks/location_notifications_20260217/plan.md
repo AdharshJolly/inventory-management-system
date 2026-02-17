@@ -24,12 +24,12 @@ Mapping stock to specific physical areas.
 - [x] Task: UI Updates for Transactions ffad046
     - [x] Update 'Execute Transaction' form to include a 'Location' searchable dropdown
     - [x] Update 'History' table to show location for each movement
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Location Integration'
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Location Integration' e6018a0
 
 ## Phase 3: Notification Infrastructure
 Building the engine for proactive alerts.
 
-- [ ] Task: Notification Model and Logic
+- [~] Task: Notification Model and Logic
     - [ ] Create `Notification` Mongoose model
     - [ ] Implement `createNotification` utility in backend
     - [ ] Add hooks to `createTransaction` to trigger notifications on low stock
