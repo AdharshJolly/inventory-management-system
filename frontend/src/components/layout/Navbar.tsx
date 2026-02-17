@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../ui/Button';
 import { LogOut, User } from 'lucide-react';
+import NotificationCenter from './NotificationCenter';
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -15,9 +16,13 @@ const Navbar: React.FC = () => {
               InventoryMS
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-gray-700">
-              <User size={18} />
+          <div className="flex items-center gap-2 md:gap-4">
+            <NotificationCenter />
+            
+            <div className="h-8 w-px bg-gray-100 mx-1 hidden sm:block"></div>
+
+            <div className="flex items-center gap-2 text-sm text-gray-700 ml-1">
+              <User size={18} className="text-gray-400" />
               <span className="hidden sm:inline font-medium">{user?.name}</span>
             </div>
             <Button variant="outline" size="sm" onClick={logout} className="gap-2">
