@@ -20,10 +20,10 @@ Building the core environment and the REST API for the Inventory Management Syst
 ## Phase 2: CRUD APIs (Suppliers & Products)
 Building the RESTful endpoints for managing core entities.
 
-- [ ] Task: Supplier API (CRUD)
-    - [ ] Write Tests: Supplier controller unit and integration tests
-    - [ ] Implement Feature: Create routes and controller for Supplier CRUD
-- [ ] Task: Product API (CRUD)
+- [x] Task: Supplier API (CRUD) 902b875
+    - [x] Write Tests: Supplier controller unit and integration tests
+    - [x] Implement Feature: Create routes and controller for Supplier CRUD
+- [~] Task: Product API (CRUD)
     - [ ] Write Tests: Product controller unit and integration tests
     - [ ] Implement Feature: Create routes and controller for Product CRUD (must reference a Supplier)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: CRUD APIs (Suppliers & Products)' (Protocol in workflow.md)
