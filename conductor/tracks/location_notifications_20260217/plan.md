@@ -7,10 +7,10 @@ Establishing the base for physical inventory organization.
     - [x] Create `Location` Mongoose model
     - [x] Implement backend CRUD controllers and routes for Locations
     - [x] Write integration tests for Location API
-- [~] Task: Location Management UI
-    - [ ] Create 'Locations' page in frontend
-    - [ ] Implement Add/Edit/Delete functionality for Locations using the existing Modal pattern
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Location Management'
+- [x] Task: Location Management UI 2721adb
+    - [x] Create 'Locations' page in frontend
+    - [x] Implement Add/Edit/Delete functionality for Locations using the existing Modal pattern
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Location Management'
 
 ## Phase 2: Inventory Integration
 Mapping stock to specific physical areas.
