@@ -51,7 +51,7 @@ Securing actions and finishing the interface.
 - [x] Task: Conditional UI Actions 1be5568
     - [x] Implement `RoleGuard` component or logic in frontend
     - [x] Hide "Delete" buttons for users with the `store-clerk` role
-- [~] Task: Final Polish & Asset Audit
-    - [ ] Review all empty states and ensure consistent margins/padding
-    - [ ] Final quality audit across all layers
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: RBAC & Polish'
+- [x] Task: Final Polish & Asset Audit d5e019c
+    - [x] Review all empty states and ensure consistent margins/padding
+    - [x] Final quality audit across all layers
+- [~] Task: Conductor - User Manual Verification 'Phase 4: RBAC & Polish'
