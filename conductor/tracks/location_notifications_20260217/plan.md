@@ -10,12 +10,12 @@ Establishing the base for physical inventory organization.
 - [x] Task: Location Management UI 2721adb
     - [x] Create 'Locations' page in frontend
     - [x] Implement Add/Edit/Delete functionality for Locations using the existing Modal pattern
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Location Management'
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Location Management' 7561519
 
 ## Phase 2: Inventory Integration
 Mapping stock to specific physical areas.
 
-- [ ] Task: Schema Refactoring (Stock & Transaction)
+- [~] Task: Schema Refactoring (Stock & Transaction)
     - [ ] Update `Stock` model to include `location` reference
     - [ ] Update `Transaction` model to include `location` (source/destination)
 - [ ] Task: Refactor Transaction Logic
