@@ -41,18 +41,18 @@ Building the engine for proactive alerts.
 ## Phase 4: Notification UI
 Connecting the user to the alert system.
 
-- [~] Task: Notification Center Component
-    - [ ] Create a dropdown component in the `Navbar` for alerts
-    - [ ] Implement real-time indicator (badge) for unread counts
-- [ ] Task: Notification Management
-    - [ ] Implement 'Mark all as read' functionality
-    - [ ] Ensure clicking an alert navigates to the relevant page (e.g., Product detail)
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Notification UI'
+- [x] Task: Notification Center Component f9bd0f5
+    - [x] Create a dropdown component in the `Navbar` for alerts
+    - [x] Implement real-time indicator (badge) for unread counts
+- [x] Task: Notification Management f9bd0f5
+    - [x] Implement 'Mark all as read' functionality
+    - [x] Ensure clicking an alert navigates to the relevant page (e.g., Product detail)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Notification UI' f9bd0f5
 
 ## Phase 5: User Profile & Security
 Enhancing personal settings and account safety.
 
-- [ ] Task: Profile Settings Page
+- [~] Task: Profile Settings Page
     - [ ] Create `/profile` route and page
     - [ ] Implement form to update Name and Email
 - [ ] Task: Password Management
