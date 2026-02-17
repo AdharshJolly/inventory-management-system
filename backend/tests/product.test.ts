@@ -80,9 +80,10 @@ describe('Product API', () => {
         .set('Authorization', `Bearer ${token}`);
 
       expect(res.status).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body.length).toBeGreaterThan(0);
-      expect(res.body[0].supplier.name).toBeDefined(); // Populated
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data.length).toBeGreaterThan(0);
+      expect(res.body.pagination).toBeDefined();
+      expect(res.body.data[0].supplier.name).toBeDefined(); // Populated
     });
   });
 
