@@ -40,12 +40,12 @@ Improving performance and usability for growing datasets.
 - [x] Task: Searchable Select for Transactions 7510922
     - [x] Create reusable `Combobox` component
     - [x] Integrate `Combobox` into Transaction Execution page for product selection
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Pagination & Sorting'
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Pagination & Sorting' 8ee9112
 
 ## Phase 4: RBAC & Final Polish
 Securing actions and finishing the interface.
 
-- [ ] Task: Role-Based Backend Protection
+- [~] Task: Role-Based Backend Protection
     - [ ] Implement `authorize` middleware in backend
     - [ ] Protect DELETE and PUT routes for Products/Suppliers (Managers only)
 - [ ] Task: Conditional UI Actions
