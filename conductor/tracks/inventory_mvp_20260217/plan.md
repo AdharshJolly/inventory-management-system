@@ -3,7 +3,7 @@
 ## Phase 1: Foundation and Initial Backend
 Building the core environment and the REST API for the Inventory Management System.
 
-- [x] Task: Project Scaffolding (Node.js/Bun, Express, Mongoose)
+- [x] Task: Project Scaffolding (Node.js/Bun, Express, Mongoose) e2509fc
     - [x] Initialize project with `bun init`
     - [x] Install essential dependencies: `express`, `mongoose`, `cors`, `dotenv`, `jsonwebtoken`, `bcryptjs`
     - [x] Configure environment variables (`.env`) for MongoDB and JWT secret
