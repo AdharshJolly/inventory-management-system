@@ -29,19 +29,19 @@ Mapping stock to specific physical areas.
 ## Phase 3: Notification Infrastructure
 Building the engine for proactive alerts.
 
-- [~] Task: Notification Model and Logic
-    - [ ] Create `Notification` Mongoose model
-    - [ ] Implement `createNotification` utility in backend
-    - [ ] Add hooks to `createTransaction` to trigger notifications on low stock
-- [ ] Task: Notification API
-    - [ ] Create `GET /api/notifications` (paginated)
-    - [ ] Create `PATCH /api/notifications/:id/read`
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Notification Backend'
+- [x] Task: Notification Model and Logic 5a4328b
+    - [x] Create `Notification` Mongoose model
+    - [x] Implement `createNotification` utility in backend
+    - [x] Add hooks to `createTransaction` to trigger notifications on low stock
+- [x] Task: Notification API 5a4328b
+    - [x] Create `GET /api/notifications` (paginated)
+    - [x] Create `PATCH /api/notifications/:id/read`
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Notification Backend' 1ffc2c4
 
 ## Phase 4: Notification UI
 Connecting the user to the alert system.
 
-- [ ] Task: Notification Center Component
+- [~] Task: Notification Center Component
     - [ ] Create a dropdown component in the `Navbar` for alerts
     - [ ] Implement real-time indicator (badge) for unread counts
 - [ ] Task: Notification Management
