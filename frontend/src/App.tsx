@@ -5,6 +5,7 @@ import MainLayout from './components/layout/MainLayout'
 import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import Suppliers from './pages/Suppliers'
+import Locations from './pages/Locations'
 import TransactionHistory from './pages/TransactionHistory'
 import TransactionExecution from './pages/TransactionExecution'
 import Login from './pages/Login'
@@ -46,6 +47,12 @@ function App() {
         <Route path="/suppliers" element={
           <ProtectedRoute>
             <Suppliers />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/locations" element={
+          <ProtectedRoute>
+            <Locations />
           </ProtectedRoute>
         } />
 

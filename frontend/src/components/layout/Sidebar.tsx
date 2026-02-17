@@ -4,6 +4,7 @@ import {
   LayoutDashboard, 
   Package, 
   Users, 
+  MapPin,
   History, 
   ArrowLeftRight 
 } from 'lucide-react';
@@ -15,6 +16,7 @@ const Sidebar: React.FC = () => {
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'Products', path: '/products', icon: Package },
     { name: 'Suppliers', path: '/suppliers', icon: Users },
+    { name: 'Locations', path: '/locations', icon: MapPin },
     { name: 'Transactions', path: '/transactions', icon: ArrowLeftRight },
     { name: 'History', path: '/history', icon: History },
   ];

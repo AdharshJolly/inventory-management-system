@@ -17,5 +17,12 @@ export const productSchema = z.object({
   supplier: z.string().min(1, 'Supplier is required'),
 });
 
+export const locationSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  description: z.string().optional(),
+  type: z.string().min(2, 'Type is required'), // e.g. Warehouse, Shelf, etc.
+});
+
 export type SupplierFormData = z.infer<typeof supplierSchema>;
 export type ProductFormData = z.infer<typeof productSchema>;
+export type LocationFormData = z.infer<typeof locationSchema>;
