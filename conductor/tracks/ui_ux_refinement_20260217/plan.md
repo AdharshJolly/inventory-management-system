@@ -3,14 +3,14 @@
 ## Phase 1: UI Infrastructure and Feedback
 Setting up the foundations for a smoother user experience.
 
-- [ ] Task: Global Feedback System
-    - [ ] Install `react-hot-toast`
-    - [ ] Implement a `ToastProvider` and update `App.tsx`
-    - [ ] Add success/error toasts to all existing form submissions (Login, Transactions)
-- [ ] Task: Skeleton Loaders & Better Loading States
-    - [ ] Create a reusable `Skeleton` component
-    - [ ] Replace "Loading..." text in Dashboard, Products, and Suppliers with skeleton tables/cards
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: UI Infrastructure'
+- [x] Task: Global Feedback System 440af03
+    - [x] Install `react-hot-toast`
+    - [x] Implement a `ToastProvider` and update `App.tsx`
+    - [x] Add success/error toasts to all existing form submissions (Login, Transactions)
+- [x] Task: Skeleton Loaders & Better Loading States 440af03
+    - [x] Create a reusable `Skeleton` component
+    - [x] Replace "Loading..." text in Dashboard, Products, and Suppliers with skeleton tables/cards
+- [x] Task: Conductor - User Manual Verification 'Phase 1: UI Infrastructure' 440af03
 
 ## Phase 2: Form & Validation Overhaul
 Ensuring data integrity and providing better user guidance.
