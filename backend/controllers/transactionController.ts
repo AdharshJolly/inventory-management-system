@@ -3,6 +3,30 @@ import mongoose from 'mongoose';
 import Transaction, { TransactionType } from '../models/Transaction';
 import Stock from '../models/Stock';
 import Product from '../models/Product';
+import User from '../models/User';
+import Notification, { NotificationType } from '../models/Notification';
+
+/**
+ * Utility to notify all managers about stock alerts
+ */
+const notifyManagers = async (message: string, type: NotificationType, link?: string) => {
+  try {
+    const managers = await User.find({ role: 'warehouse-manager' }).select('_id');
+    const notifications = managers.map(manager => ({
+      user: manager._id,
+      message,
+      type,
+      link,
+      isRead: false
+    }));
+
+    if (notifications.length > 0) {
+      await Notification.insertMany(notifications);
+    }
+  } catch (err) {
+    console.error('Notification error:', err);
+  }
+};
 
 // @desc    Get all transactions
 // @route   GET /api/transactions
@@ -42,19 +66,14 @@ export const getTransactions = async (req: Request, res: Response) => {
 export const createTransaction = async (req: any, res: Response) => {
   const { product, location, type, quantity, notes } = req.body;
 
-  // Use a session if not in test env (unless replica set is configured)
   const isTest = process.env.NODE_ENV === 'test';
   
   if (isTest) {
     try {
-      // 1. Verify product exists
       const productDoc = await Product.findById(product);
-      if (!productDoc) {
-        return res.status(404).json({ message: 'Product not found' });
-      }
+      if (!productDoc) return res.status(404).json({ message: 'Product not found' });
 
-      // 2. Find or create stock for this product-location pair
-      let stock = await Stock.findOne({ product, location });
+      let stock = await Stock.findOne({ product, location }).populate('location', 'name');
 
       if (!stock) {
         if (type === TransactionType.OUT) {
@@ -63,7 +82,6 @@ export const createTransaction = async (req: any, res: Response) => {
         stock = new Stock({ product, location, currentQuantity: 0 });
       }
 
-      // 3. Update stock quantity
       if (type === TransactionType.IN) {
         stock.currentQuantity += Number(quantity);
       } else {
@@ -75,7 +93,17 @@ export const createTransaction = async (req: any, res: Response) => {
 
       await stock.save();
 
-      // 4. Create transaction
+      // Check for low stock alert
+      if (stock.currentQuantity <= stock.minLevel) {
+        // Need to re-query to get location name for message if it wasn't populated or was new
+        const stockWithLoc = await Stock.findOne({ product, location }).populate('location', 'name');
+        await notifyManagers(
+          `Low stock alert: ${productDoc.name} (${productDoc.sku}) at ${stockWithLoc?.location?.name}. Current: ${stock.currentQuantity}`,
+          NotificationType.LOW_STOCK,
+          '/products'
+        );
+      }
+
       const transaction = await Transaction.create({
         product,
         location,
@@ -91,7 +119,6 @@ export const createTransaction = async (req: any, res: Response) => {
     }
   }
 
-  // Production path with Transactions
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -127,6 +154,16 @@ export const createTransaction = async (req: any, res: Response) => {
     }
 
     await stock.save({ session });
+
+    // Check for low stock alert (outside session or with session)
+    if (stock.currentQuantity <= stock.minLevel) {
+      const stockWithLoc = await Stock.findOne({ product, location }).populate('location', 'name');
+      await notifyManagers(
+        `Low stock alert: ${productDoc.name} (${productDoc.sku}) at ${stockWithLoc?.location?.name}. Current: ${stock.currentQuantity}`,
+        NotificationType.LOW_STOCK,
+        '/products'
+      );
+    }
 
     const transaction = await Transaction.create([{
       product,

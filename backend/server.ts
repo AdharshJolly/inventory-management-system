@@ -21,6 +21,7 @@ import productRoutes from './routes/productRoutes';
 import transactionRoutes from './routes/transactionRoutes';
 import dashboardRoutes from './routes/dashboardRoutes';
 import locationRoutes from './routes/locationRoutes';
+import notificationRoutes from './routes/notificationRoutes';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/suppliers', supplierRoutes);
@@ -28,6 +29,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/locations', locationRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Basic route
 app.get('/', (req, res) => {

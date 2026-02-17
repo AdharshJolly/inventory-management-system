@@ -21,7 +21,7 @@
     "dev": "bun --watch server.ts",
     "start": "bun server.ts",
     "test": "bun test",
-    "test:seq": "bun test tests/auth.test.ts && bun test tests/supplier.test.ts && bun test tests/product.test.ts && bun test tests/transaction.test.ts && bun test tests/dashboard.test.ts && bun test tests/models.test.ts && bun test tests/location.test.ts"
+    "test:seq": "bun test tests/auth.test.ts && bun test tests/supplier.test.ts && bun test tests/product.test.ts && bun test tests/transaction.test.ts && bun test tests/dashboard.test.ts && bun test tests/models.test.ts && bun test tests/location.test.ts && bun test tests/notification.test.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
