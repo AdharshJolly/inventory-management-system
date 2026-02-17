@@ -1,6 +1,6 @@
 # Implementation Plan: Inventory Management System MVP
 
-## Phase 1: Foundation and Initial Backend
+## Phase 1: Foundation and Initial Backend [checkpoint: 465df9e]
 Building the core environment and the REST API for the Inventory Management System.
 
 - [x] Task: Project Scaffolding (Node.js/Bun, Express, Mongoose) e2509fc
@@ -15,7 +15,7 @@ Building the core environment and the REST API for the Inventory Management Syst
     - [x] Write Tests: Auth controller and middleware tests
     - [x] Implement Feature: Create `User` controller for Register/Login
     - [x] Implement Feature: Create `authMiddleware` to protect routes
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation and Initial Backend' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation and Initial Backend' (Protocol in workflow.md) 465df9e
 
 ## Phase 2: CRUD APIs (Suppliers & Products)
 Building the RESTful endpoints for managing core entities.
