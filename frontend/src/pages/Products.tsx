@@ -8,7 +8,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Skeleton from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
-import { productSchema, ProductFormData } from '../schemas';
+import { productSchema, type ProductFormData } from '../schemas';
 import { Plus, Search, Tag } from 'lucide-react';
 
 const Products: React.FC = () => {
@@ -25,7 +25,7 @@ const Products: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm<ProductFormData>({
-    resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema) as any,
   });
 
   const fetchData = async () => {

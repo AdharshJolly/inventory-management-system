@@ -8,7 +8,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Skeleton from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
-import { supplierSchema, SupplierFormData } from '../schemas';
+import { supplierSchema, type SupplierFormData } from '../schemas';
 import { Plus, User, Mail, Phone } from 'lucide-react';
 
 const Suppliers: React.FC = () => {
@@ -23,7 +23,7 @@ const Suppliers: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm<SupplierFormData>({
-    resolver: zodResolver(supplierSchema),
+    resolver: zodResolver(supplierSchema) as any,
   });
 
   const fetchSuppliers = async () => {
