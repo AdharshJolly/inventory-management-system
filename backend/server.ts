@@ -6,9 +6,6 @@ import connectDB from './config/db';
 // Load env vars
 dotenv.config();
 
-// Connect to database
-connectDB();
-
 const app = express();
 
 // Body parser
@@ -17,6 +14,11 @@ app.use(express.json());
 // Enable CORS
 app.use(cors());
 
+// Routes
+import authRoutes from './routes/authRoutes';
+
+app.use('/api/auth', authRoutes);
+
 // Basic route
 app.get('/', (req, res) => {
   res.send('API is running...');
@@ -24,6 +26,13 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  // Connect to database
+  connectDB();
+
+  app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
+}
+
+export default app;
