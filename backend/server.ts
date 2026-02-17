@@ -16,8 +16,10 @@ app.use(cors());
 
 // Routes
 import authRoutes from './routes/authRoutes';
+import supplierRoutes from './routes/supplierRoutes';
 
 app.use('/api/auth', authRoutes);
+app.use('/api/suppliers', supplierRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
