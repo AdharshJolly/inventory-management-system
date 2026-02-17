@@ -50,9 +50,9 @@ Building the user interface to interact with the API.
 - [x] Task: Auth and State Management 8b81fae
     - [x] Write Tests: Auth context tests
     - [x] Implement Feature: Create `AuthContext` to manage user login state and Axios interceptors for JWT
-- [~] Task: Core UI Components (Layout, Forms, Tables)
-    - [ ] Write Tests: UI component tests (using React Testing Library)
-    - [ ] Implement Feature: Create reusable components for Layout, Navigation, Tables, and Forms
+- [x] Task: Core UI Components (Layout, Forms, Tables) f504472
+    - [x] Write Tests: UI component tests (using React Testing Library)
+    - [x] Implement Feature: Create reusable components for Layout, Navigation, Tables, and Forms
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Frontend Development (React & Tailwind)' (Protocol in workflow.md)
 
 ## Phase 5: MVP Polish and Integration
