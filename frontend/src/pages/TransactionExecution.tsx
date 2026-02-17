@@ -5,17 +5,19 @@ import api from '../api/axios';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Combobox from '../components/ui/Combobox';
+import Skeleton from '../components/ui/Skeleton';
 import { ArrowLeftRight, AlertCircle } from 'lucide-react';
 
 const TransactionExecution: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [locations, setLocations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     product: '',
+    location: '',
     type: 'IN',
     quantity: 1,
     notes: '',
@@ -24,40 +26,52 @@ const TransactionExecution: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await api.get('/products?limit=1000');
-        const productList = response.data.data || [];
+        const [productsRes, locationsRes] = await Promise.all([
+          api.get('/products?limit=1000'),
+          api.get('/locations?limit=1000'),
+        ]);
+        
+        const productList = productsRes.data.data || [];
+        const locationList = locationsRes.data.data || [];
+        
         setProducts(productList);
-        if (productList.length > 0) {
-          setFormData(prev => ({ ...prev, product: productList[0]._id }));
+        setLocations(locationList);
+        
+        if (productList.length > 0 && locationList.length > 0) {
+          setFormData(prev => ({ 
+            ...prev, 
+            product: productList[0]._id,
+            location: locationList[0]._id
+          }));
         }
       } catch (err) {
-        console.error('Failed to fetch products', err);
-        setError('Could not load products for selection.');
+        console.error('Failed to fetch data', err);
+        setError('Could not load products or locations for selection.');
       } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-    setSuccess(null);
 
     try {
       await api.post('/transactions', formData);
       const product = products.find(p => p._id === formData.product);
-      toast.success(`Successfully recorded ${formData.type} transaction for ${product?.name}`);
-      setSuccess('Transaction recorded successfully!');
-      // Reset form but keep same product selected
+      const location = locations.find(l => l._id === formData.location);
+      toast.success(`Recorded ${formData.type} for ${product?.name} at ${location?.name}`);
+      
+      // Reset form but keep same product/location selected
       setFormData(prev => ({ ...prev, quantity: 1, notes: '' }));
       
       // Navigate to history after a short delay
-      setTimeout(() => navigate('/history'), 1500);
+      setTimeout(() => navigate('/history'), 1000);
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to execute transaction.';
       setError(message);
@@ -67,12 +81,23 @@ const TransactionExecution: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading products...</div>;
+  if (loading) return (
+    <div className="max-w-2xl mx-auto space-y-6">
+      <Skeleton className="h-10 w-48" />
+      <Skeleton className="h-96 w-full rounded-xl" />
+    </div>
+  );
 
-  const comboboxItems = products.map(p => ({
+  const productItems = products.map(p => ({
     id: p._id,
     label: p.name,
     subLabel: p.sku
+  }));
+
+  const locationItems = locations.map(l => ({
+    id: l._id,
+    label: l.name,
+    subLabel: l.type
   }));
 
   return (
@@ -86,31 +111,35 @@ const TransactionExecution: React.FC = () => {
 
       <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
         {error && (
-          <div className="mb-6 bg-red-50 text-red-600 p-4 rounded-lg flex items-center gap-2 border border-red-100">
-            <AlertCircle size={18} />
+          <div className="mb-6 bg-red-50 text-red-600 p-4 rounded-lg flex items-center gap-2 border border-red-100 text-sm">
+            <AlertCircle size={18} className="shrink-0" />
             {error}
           </div>
         )}
 
-        {success && (
-          <div className="mb-6 bg-green-50 text-green-600 p-4 rounded-lg border border-green-100 font-medium">
-            {success} Redirecting to history...
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Combobox
-            label="Select Product"
-            placeholder="Search by name or SKU..."
-            items={comboboxItems}
-            value={formData.product}
-            onChange={(value) => setFormData({ ...formData, product: value })}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Combobox
+              label="Select Product"
+              placeholder="Search products..."
+              items={productItems}
+              value={formData.product}
+              onChange={(value) => setFormData({ ...formData, product: value })}
+            />
 
-          <div className="grid grid-cols-2 gap-4">
+            <Combobox
+              label="Select Location"
+              placeholder="Search locations..."
+              items={locationItems}
+              value={formData.location}
+              onChange={(value) => setFormData({ ...formData, location: value })}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Movement Type</label>
-              <div className="flex rounded-md shadow-sm">
+              <div className="flex rounded-md shadow-sm h-10">
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, type: 'IN' })}
@@ -148,7 +177,7 @@ const TransactionExecution: React.FC = () => {
 
           <Input
             label="Notes / Comments"
-            placeholder="Reason for movement (e.g. Restock from supplier, Store sale...)"
+            placeholder="Reason for movement..."
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           />

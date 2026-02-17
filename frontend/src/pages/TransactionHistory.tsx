@@ -5,7 +5,7 @@ import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
 import Pagination from '../components/ui/Pagination';
 import EmptyState from '../components/ui/EmptyState';
-import { ArrowUpDown, ArrowUp, ArrowDown, Calendar, ClipboardList, History } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Calendar, ClipboardList, History, MapPin } from 'lucide-react';
 
 const TransactionHistory: React.FC = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -113,6 +113,7 @@ const TransactionHistory: React.FC = () => {
                       <div className="flex items-center">Date <SortIcon column="createdAt" /></div>
                     </th>
                     <th className="px-6 py-3 font-semibold">Product</th>
+                    <th className="px-6 py-3 font-semibold">Location</th>
                     <th className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => handleSort('type')}>
                       <div className="flex items-center">Type <SortIcon column="type" /></div>
                     </th>
@@ -126,13 +127,22 @@ const TransactionHistory: React.FC = () => {
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {sortedTransactions.map((t) => (
                     <tr key={t._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-xs">
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
                           {new Date(t.createdAt).toLocaleDateString()}
                         </div>
                       </td>
-                      <td className="px-6 py-4 font-medium text-gray-900">{t.product?.name}</td>
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">{t.product?.name}</div>
+                        <div className="text-xs text-gray-500 font-mono">{t.product?.sku}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-1.5 text-gray-700 bg-gray-100 px-2 py-1 rounded w-fit">
+                          <MapPin size={12} className="text-gray-400" />
+                          <span className="text-xs font-medium">{t.location?.name || 'N/A'}</span>
+                        </div>
+                      </td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                           t.type === 'IN' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -140,14 +150,14 @@ const TransactionHistory: React.FC = () => {
                           {t.type}
                         </span>
                       </td>
-                      <td className="px-6 py-4 font-mono font-medium">{t.quantity}</td>
+                      <td className="px-6 py-4 font-mono font-medium text-gray-900">{t.quantity}</td>
                       <td className="px-6 py-4 max-w-xs truncate text-gray-500">
                         <div className="flex items-center gap-2">
                           <ClipboardList size={14} className="flex-shrink-0" />
                           <span className="truncate">{t.notes}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-500">{t.user?.name}</td>
+                      <td className="px-6 py-4 text-gray-500 text-xs">{t.user?.name}</td>
                     </tr>
                   ))}
                 </tbody>
