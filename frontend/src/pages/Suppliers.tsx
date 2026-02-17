@@ -8,8 +8,10 @@ import Input from '../components/ui/Input';
 import Skeleton from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
 import Pagination from '../components/ui/Pagination';
+import RoleGuard from '../components/auth/RoleGuard';
+import EmptyState from '../components/ui/EmptyState';
 import { supplierSchema, type SupplierFormData } from '../schemas';
-import { Plus, User, Mail, Phone, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, User, Mail, Phone, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown, Users } from 'lucide-react';
 
 const Suppliers: React.FC = () => {
   const [suppliers, setSuppliers] = useState<any[]>([]);
@@ -217,6 +219,20 @@ const Suppliers: React.FC = () => {
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
           </div>
+        ) : suppliers.length === 0 ? (
+          <EmptyState
+            title="No suppliers found"
+            description="Start by adding your first supplier to manage your inventory source."
+            icon={<Users size={48} className="text-gray-300" />}
+            action={
+              <RoleGuard allowedRoles={['warehouse-manager']}>
+                <Button onClick={openAddModal} variant="outline" className="gap-2">
+                  <Plus size={18} />
+                  Add First Supplier
+                </Button>
+              </RoleGuard>
+            }
+          />
         ) : (
           <>
             <div className="overflow-x-auto">

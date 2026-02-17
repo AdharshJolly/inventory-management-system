@@ -9,8 +9,9 @@ import Skeleton from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
 import Pagination from '../components/ui/Pagination';
 import RoleGuard from '../components/auth/RoleGuard';
+import EmptyState from '../components/ui/EmptyState';
 import { productSchema, type ProductFormData } from '../schemas';
-import { Plus, Search, Tag, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Search, Tag, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown, Package } from 'lucide-react';
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -260,6 +261,20 @@ const Products: React.FC = () => {
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
           </div>
+        ) : sortedProducts.length === 0 ? (
+          <EmptyState
+            title="No products found"
+            description="Your inventory is empty. Start by adding your first product to track."
+            icon={<Package size={48} className="text-gray-300" />}
+            action={
+              <RoleGuard allowedRoles={['warehouse-manager']}>
+                <Button onClick={openAddModal} variant="outline" className="gap-2">
+                  <Plus size={18} />
+                  Add First Product
+                </Button>
+              </RoleGuard>
+            }
+          />
         ) : (
           <>
             <div className="overflow-x-auto">

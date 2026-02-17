@@ -4,7 +4,8 @@ import api from '../api/axios';
 import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
 import Pagination from '../components/ui/Pagination';
-import { ArrowUpDown, ArrowUp, ArrowDown, Calendar, ClipboardList } from 'lucide-react';
+import EmptyState from '../components/ui/EmptyState';
+import { ArrowUpDown, ArrowUp, ArrowDown, Calendar, ClipboardList, History } from 'lucide-react';
 
 const TransactionHistory: React.FC = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -90,6 +91,18 @@ const TransactionHistory: React.FC = () => {
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
           </div>
+        ) : sortedTransactions.length === 0 ? (
+          <EmptyState
+            title="No history found"
+            description="All stock movements will appear here once you record your first transaction."
+            icon={<History size={48} className="text-gray-300" />}
+            action={
+              <Button onClick={() => navigate('/transactions')} variant="outline" className="gap-2">
+                <ArrowUpDown size={18} />
+                Execute First Movement
+              </Button>
+            }
+          />
         ) : (
           <>
             <div className="overflow-x-auto">
