@@ -4,7 +4,8 @@ import toast from 'react-hot-toast';
 import api from '../api/axios';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import { ArrowLeftRight, Package, AlertCircle } from 'lucide-react';
+import Combobox from '../components/ui/Combobox';
+import { ArrowLeftRight, AlertCircle } from 'lucide-react';
 
 const TransactionExecution: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -68,6 +69,12 @@ const TransactionExecution: React.FC = () => {
 
   if (loading) return <div className="p-8 text-center text-gray-500">Loading products...</div>;
 
+  const comboboxItems = products.map(p => ({
+    id: p._id,
+    label: p.name,
+    subLabel: p.sku
+  }));
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
@@ -92,26 +99,13 @@ const TransactionExecution: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Select Product</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <Package size={18} />
-              </div>
-              <select
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                value={formData.product}
-                onChange={(e) => setFormData({ ...formData, product: e.target.value })}
-                required
-              >
-                {products.map((p) => (
-                  <option key={p._id} value={p._id}>
-                    {p.name} ({p.sku})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <Combobox
+            label="Select Product"
+            placeholder="Search by name or SKU..."
+            items={comboboxItems}
+            value={formData.product}
+            onChange={(value) => setFormData({ ...formData, product: value })}
+          />
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
