@@ -26,6 +26,14 @@ const Products: React.FC = () => {
     formState: { errors },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema) as any,
+    defaultValues: {
+      sku: '',
+      name: '',
+      category: '',
+      description: '',
+      basePrice: 0,
+      supplier: '',
+    },
   });
 
   const fetchData = async () => {

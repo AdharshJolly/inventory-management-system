@@ -24,6 +24,13 @@ const Suppliers: React.FC = () => {
     formState: { errors },
   } = useForm<SupplierFormData>({
     resolver: zodResolver(supplierSchema) as any,
+    defaultValues: {
+      name: '',
+      contactPerson: '',
+      email: '',
+      phone: '',
+      address: '',
+    },
   });
 
   const fetchSuppliers = async () => {
