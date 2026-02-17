@@ -52,13 +52,13 @@ Connecting the user to the alert system.
 ## Phase 5: User Profile & Security
 Enhancing personal settings and account safety.
 
-- [~] Task: Profile Settings Page
-    - [ ] Create `/profile` route and page
-    - [ ] Implement form to update Name and Email
-- [ ] Task: Password Management
-    - [ ] Implement secure "Change Password" API endpoint
-    - [ ] Add password change form with validation to the Profile page
-- [ ] Task: Final Polish & Audit
-    - [ ] Ensure all new features follow RBAC rules (e.g., only managers create locations)
-    - [ ] Final quality audit
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Profile & Final Polish'
+- [x] Task: Profile Settings Page 558959b
+    - [x] Create `/profile` route and page
+    - [x] Implement form to update Name and Email
+- [x] Task: Password Management 558959b
+    - [x] Implement secure "Change Password" API endpoint
+    - [x] Add password change form with validation to the Profile page
+- [x] Task: Final Polish & Audit 558959b
+    - [x] Ensure all new features follow RBAC rules (e.g., only managers create locations)
+    - [x] Final quality audit
+- [~] Task: Conductor - User Manual Verification 'Phase 5: Profile & Final Polish'
