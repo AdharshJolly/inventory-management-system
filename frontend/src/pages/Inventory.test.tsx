@@ -20,8 +20,8 @@ const mockInventory = [
     totalMinLevel: 20,
     status: 'In Stock',
     locations: [
-      { locationName: 'Warehouse 1', quantity: 60 },
-      { locationName: 'Warehouse 2', quantity: 40 }
+      { stockId: 's1', locationName: 'Warehouse 1', quantity: 60, minLevel: 10 },
+      { stockId: 's2', locationName: 'Warehouse 2', quantity: 40, minLevel: 5 }
     ]
   },
   {
@@ -32,7 +32,7 @@ const mockInventory = [
     totalMinLevel: 10,
     status: 'Low Stock',
     locations: [
-      { locationName: 'Warehouse 1', quantity: 5 }
+      { stockId: 's3', locationName: 'Warehouse 1', quantity: 5, minLevel: 10 }
     ]
   }
 ];
@@ -64,7 +64,7 @@ describe('Inventory Page', () => {
     });
   });
 
-  it('expands row to show location details on click', async () => {
+  it('expands row to show location details and alert levels', async () => {
     (api.get as any).mockResolvedValue({ data: mockInventory });
 
     render(
@@ -83,11 +83,44 @@ describe('Inventory Page', () => {
     // Click to expand
     fireEvent.click(screen.getByText('Product A'));
 
-    // Now location details should be visible
+    // Now location details and alert levels should be visible
     expect(screen.getByText('Warehouse 1')).toBeInTheDocument();
     expect(screen.getByText('60')).toBeInTheDocument();
+    
+    // There might be multiple 5s or 10s if other products have those quantities
+    // Check for the specific alert level text
+    expect(screen.getAllByText(/Alert at:/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('10').length).toBeGreaterThan(0);
+    
     expect(screen.getByText('Warehouse 2')).toBeInTheDocument();
     expect(screen.getByText('40')).toBeInTheDocument();
+  });
+
+  it('opens edit alert modal when clicking edit button', async () => {
+    (api.get as any).mockResolvedValue({ data: mockInventory });
+
+    render(
+      <BrowserRouter>
+        <Inventory />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Product A')).toBeInTheDocument();
+    });
+
+    // Click to expand
+    fireEvent.click(screen.getByText('Product A'));
+
+    // Find and click the edit button (first one)
+    const editButtons = screen.getAllByTitle(/Edit Alert Level/i);
+    fireEvent.click(editButtons[0]);
+
+    // Check if modal title is visible
+    expect(screen.getByText(/Set Low Stock Alert Level/i)).toBeInTheDocument();
+    // Modal contains product name in a descriptive paragraph
+    expect(screen.getAllByText(/Product A/i).length).toBeGreaterThan(1);
+    expect(screen.getAllByText(/Warehouse 1/i).length).toBeGreaterThan(1);
   });
 
   it('filters inventory based on search input', async () => {

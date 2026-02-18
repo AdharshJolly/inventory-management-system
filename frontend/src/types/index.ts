@@ -15,8 +15,10 @@ export interface AuthState {
 }
 
 export interface StockLocationBreakdown {
+  stockId: string;
   locationName: string;
   quantity: number;
+  minLevel: number;
 }
 
 export interface ProductStockBreakdown {

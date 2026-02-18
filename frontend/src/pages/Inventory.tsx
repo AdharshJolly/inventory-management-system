@@ -4,6 +4,7 @@ import api from "../api/axios";
 import Skeleton from "../components/ui/Skeleton";
 import EmptyState from "../components/ui/EmptyState";
 import Input from "../components/ui/Input";
+import SetAlertLevelModal from "../components/inventory/SetAlertLevelModal";
 import { 
   Search, 
   Package, 
@@ -12,15 +13,26 @@ import {
   MapPin, 
   AlertTriangle, 
   CheckCircle2, 
-  XCircle 
+  XCircle,
+  BellRing,
+  Edit2
 } from "lucide-react";
-import type { ProductStockBreakdown } from "../types";
+import type { ProductStockBreakdown, StockLocationBreakdown } from "../types";
 
 const Inventory: React.FC = () => {
   const [inventory, setInventory] = useState<ProductStockBreakdown[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedStock, setSelectedStock] = useState<{
+    stockId: string;
+    productName: string;
+    locationName: string;
+    minLevel: number;
+  } | null>(null);
 
   const fetchInventory = async () => {
     setLoading(true);
@@ -44,6 +56,17 @@ const Inventory: React.FC = () => {
       ...prev,
       [id]: !prev[id]
     }));
+  };
+
+  const handleEditAlert = (e: React.MouseEvent, item: ProductStockBreakdown, loc: StockLocationBreakdown) => {
+    e.stopPropagation();
+    setSelectedStock({
+      stockId: loc.stockId,
+      productName: item.name,
+      locationName: loc.locationName,
+      minLevel: loc.minLevel
+    });
+    setIsModalOpen(true);
   };
 
   const filteredInventory = useMemo(() => {
@@ -160,15 +183,31 @@ const Inventory: React.FC = () => {
                             {item.locations.map((loc, idx) => (
                               <div 
                                 key={idx} 
-                                className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm"
+                                className="flex flex-col p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm"
                               >
-                                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                                  <MapPin size={16} className="text-blue-500" />
-                                  <span className="text-sm font-medium">{loc.locationName}</span>
+                                <div className="flex items-center justify-between mb-3">
+                                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                                    <MapPin size={16} className="text-blue-500" />
+                                    <span className="text-sm font-semibold">{loc.locationName}</span>
+                                  </div>
+                                  <span className="text-lg font-bold text-gray-900 dark:text-white">
+                                    {loc.quantity}
+                                  </span>
                                 </div>
-                                <span className="text-sm font-bold text-gray-900 dark:text-white">
-                                  {loc.quantity}
-                                </span>
+                                
+                                <div className="flex items-center justify-between pt-3 border-t border-gray-50 dark:border-gray-700/50">
+                                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <BellRing size={14} className={loc.quantity <= loc.minLevel ? "text-amber-500" : "text-gray-400"} />
+                                    <span>Alert at: <span className="font-bold text-gray-700 dark:text-gray-300">{loc.minLevel}</span></span>
+                                  </div>
+                                  <button 
+                                    onClick={(e) => handleEditAlert(e, item, loc)}
+                                    className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
+                                    title="Edit Alert Level"
+                                  >
+                                    <Edit2 size={14} />
+                                  </button>
+                                </div>
                               </div>
                             ))}
                             {item.locations.length === 0 && (
@@ -187,6 +226,16 @@ const Inventory: React.FC = () => {
           </div>
         )}
       </div>
+
+      <SetAlertLevelModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        stockId={selectedStock?.stockId || null}
+        productName={selectedStock?.productName || ""}
+        locationName={selectedStock?.locationName || ""}
+        currentMinLevel={selectedStock?.minLevel || 0}
+        onSuccess={fetchInventory}
+      />
     </div>
   );
 };
