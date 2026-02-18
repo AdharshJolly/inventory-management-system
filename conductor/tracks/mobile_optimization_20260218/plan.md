@@ -33,6 +33,8 @@ Optimizing individual elements for thumbs.
 
 Cross-browser and device testing.
 
-- [ ] Task: Form & Input Optimization
-  - [ ] Ensure `Input.tsx` and `SetAlertLevelModal.tsx` look great on mobile
-- [ ] Task: Conductor - User Manual Verification 'Final Polish'
+- [x] Task: Form & Input Optimization (19abe98)
+  - [x] Ensure `Input.tsx` and `SetAlertLevelModal.tsx` look great on mobile
+- [x] Task: Conductor - User Manual Verification 'Final Polish'
+
+## Track Complete [checkpoint: 19abe98]
