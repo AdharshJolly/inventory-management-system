@@ -86,6 +86,8 @@ describe('Stock Breakdown API', () => {
 
     const warehouseA = breakdown.locations.find((l: any) => l.locationName === 'Warehouse A');
     expect(warehouseA.quantity).toBe(60);
+    expect(warehouseA.stockId).toBeDefined();
+    expect(warehouseA.minLevel).toBe(10);
   });
 
   it('should correctly identify Low Stock status', async () => {

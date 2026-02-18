@@ -232,8 +232,10 @@ export const getStockBreakdown = async (req: Request, res: Response) => {
           totalMinLevel: { $sum: '$minLevel' },
           locations: {
             $push: {
+              stockId: '$_id',
               locationName: '$locationInfo.name',
-              quantity: '$currentQuantity'
+              quantity: '$currentQuantity',
+              minLevel: '$minLevel'
             }
           }
         }
