@@ -5,7 +5,8 @@ import Button from "../components/ui/Button";
 import Skeleton from "../components/ui/Skeleton";
 import Pagination from "../components/ui/Pagination";
 import EmptyState from "../components/ui/EmptyState";
-import {
+import Input from "../components/ui/Input"; // Added Input import
+import { // Added Search import
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
@@ -13,11 +14,13 @@ import {
   ClipboardList,
   History,
   MapPin,
+  Search,
 } from "lucide-react";
 
 const TransactionHistory: React.FC = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(""); // Added searchTerm state
   const navigate = useNavigate();
 
   // Pagination state
@@ -66,8 +69,16 @@ const TransactionHistory: React.FC = () => {
   };
 
   const sortedTransactions = useMemo(() => {
+    const filtered = transactions.filter(
+      (t) =>
+        t.product?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.product?.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.location?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.notes?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     if (sortConfig.direction) {
-      return [...transactions].sort((a, b) => {
+      return [...filtered].sort((a, b) => {
         const aValue = a[sortConfig.key];
         const bValue = b[sortConfig.key];
 
@@ -76,8 +87,8 @@ const TransactionHistory: React.FC = () => {
         return 0;
       });
     }
-    return transactions;
-  }, [transactions, sortConfig]);
+    return filtered;
+  }, [transactions, searchTerm, sortConfig]);
 
   const SortIcon = ({ column }: { column: string }) => {
     if (sortConfig.key !== column)
@@ -91,11 +102,27 @@ const TransactionHistory: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-1">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
           Inventory Log
         </h1>
-        <Button className="gap-2" onClick={() => navigate("/transactions")}>
+        <Button className="gap-2 hidden sm:flex" onClick={() => navigate("/transactions")}>
+          <ArrowUpDown size={18} />
+          New Transaction
+        </Button>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <Search className="text-gray-400" size={20} />
+          <Input
+            placeholder="Search transactions..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border-none focus:ring-0"
+          />
+        </div>
+        <Button className="gap-2 w-full sm:w-auto sm:hidden" onClick={() => navigate("/transactions")}>
           <ArrowUpDown size={18} />
           New Transaction
         </Button>

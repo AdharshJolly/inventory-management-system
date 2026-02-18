@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 disabled:pointer-events-none disabled:opacity-50";
+    "flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 disabled:pointer-events-none disabled:opacity-50";
 
   const variants = {
     primary:
@@ -35,9 +35,16 @@ const Button: React.FC<ButtonProps> = ({
     lg: "h-12 px-6 text-base",
   };
 
+  // Check if className contains responsive display utilities (e.g., hidden, sm:flex, sm:hidden)
+  const hasResponsiveDisplay =
+    /\b(hidden|flex|block|inline|grid|(?:xs|sm|md|lg|xl|2xl):(hidden|flex|block|inline|grid))\b/.test(
+      className,
+    );
+  const displayClass = hasResponsiveDisplay ? "" : "inline-flex";
+
   return (
     <button
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`${displayClass} ${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={disabled || loading}
       {...props}
     >

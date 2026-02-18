@@ -23,6 +23,7 @@ import {
   ArrowUp,
   ArrowDown,
   Users,
+  Search,
 } from "lucide-react";
 
 const Suppliers: React.FC = () => {
@@ -35,6 +36,7 @@ const Suppliers: React.FC = () => {
     null,
   );
   const [submitting, setSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Pagination state
   const [page, setPage] = useState(1);
@@ -98,8 +100,17 @@ const Suppliers: React.FC = () => {
   };
 
   const sortedSuppliers = useMemo(() => {
+    const filtered = suppliers.filter(
+      (s) =>
+        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.address.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+
     if (sortConfig.direction) {
-      return [...suppliers].sort((a, b) => {
+      return [...filtered].sort((a, b) => {
         const aValue = a[sortConfig.key] || "";
         const bValue = b[sortConfig.key] || "";
 
@@ -184,12 +195,12 @@ const Suppliers: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-1">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
           Suppliers
         </h1>
         <RoleGuard allowedRoles={["warehouse-manager"]}>
-          <Button className="gap-2" onClick={openAddModal}>
+          <Button className="gap-2 hidden sm:flex" onClick={openAddModal}>
             <Plus size={18} />
             Add Supplier
           </Button>
@@ -256,6 +267,24 @@ const Suppliers: React.FC = () => {
         message="Are you sure you want to delete this supplier? This action cannot be undone and will remove the reference from associated products."
         loading={submitting}
       />
+
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <Search className="text-gray-400" size={20} />
+          <Input
+            placeholder="Search suppliers..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border-none focus:ring-0"
+          />
+        </div>
+        <RoleGuard allowedRoles={["warehouse-manager"]}>
+          <Button className="gap-2 w-full sm:w-auto sm:hidden" onClick={openAddModal}>
+            <Plus size={18} />
+            Add Supplier
+          </Button>
+        </RoleGuard>
+      </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
         {loading ? (

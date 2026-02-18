@@ -205,12 +205,12 @@ const Products: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-1">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
           Product Catalog
         </h1>
         <RoleGuard allowedRoles={["warehouse-manager"]}>
-          <Button className="gap-2" onClick={openAddModal}>
+          <Button className="gap-2 hidden sm:flex" onClick={openAddModal}>
             <Plus size={18} />
             Add Product
           </Button>
@@ -298,14 +298,22 @@ const Products: React.FC = () => {
         loading={submitting}
       />
 
-      <div className="flex gap-4 items-center bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <Search className="text-gray-400" size={20} />
-        <Input
-          placeholder="Search by name or SKU..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="border-none focus:ring-0"
-        />
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <Search className="text-gray-400" size={20} />
+          <Input
+            placeholder="Search by name or SKU..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border-none focus:ring-0"
+          />
+        </div>
+        <RoleGuard allowedRoles={["warehouse-manager"]}>
+          <Button className="gap-2 w-full sm:w-auto sm:hidden" onClick={openAddModal}>
+            <Plus size={18} />
+            Add Product
+          </Button>
+        </RoleGuard>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
