@@ -205,7 +205,7 @@ const Inventory: React.FC = () => {
                                   </div>
                                   <button 
                                     onClick={(e) => handleEditAlert(e, item, loc)}
-                                    className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
+                                    className="p-2 sm:p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
                                     title="Edit Alert Level"
                                   >
                                     <Edit2 size={14} />

@@ -16,17 +16,17 @@ Implementing the core drawer mechanism.
   - [x] Close sidebar automatically when a link is clicked on mobile
 - [x] Task: MainLayout Margin Adjustments (27bc34e)
   - [x] Ensure content isn't shifted by 64 units on mobile
-- [~] Task: Conductor - User Manual Verification 'Layout'
+- [x] Task: Conductor - User Manual Verification 'Layout'
 
-## Phase 2: Touch & Component Refinement
+## Phase 2: Touch & Component Refinement [checkpoint: f01ebdc]
 
 Optimizing individual elements for thumbs.
 
-- [ ] Task: Button & Icon Touch Targets
+- [~] Task: Button & Icon Touch Targets
   - [ ] Audit and update `Button.tsx` and common icons for minimum 44x44px targets
-- [ ] Task: Table Mobile View
-  - [ ] Enhance `Table.tsx` with better horizontal scroll indicators
-  - [ ] Update `Inventory.tsx` expanded view for tighter mobile spacing
+- [x] Task: Table Mobile View (f01ebdc)
+  - [x] Enhance `Table.tsx` with better horizontal scroll indicators
+  - [x] Update `Inventory.tsx` expanded view for tighter mobile spacing
 - [ ] Task: Conductor - User Manual Verification 'Components'
 
 ## Phase 3: Final Polish
