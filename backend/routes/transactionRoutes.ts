@@ -3,7 +3,8 @@ import {
   getTransactions,
   createTransaction,
   getStocks,
-  getStockBreakdown
+  getStockBreakdown,
+  updateStock
 } from '../controllers/transactionController';
 import { protect } from '../middleware/authMiddleware';
 
@@ -17,5 +18,6 @@ router.route('/')
 
 router.get('/stocks', getStocks);
 router.get('/stocks/breakdown', getStockBreakdown);
+router.put('/stocks/:id', updateStock);
 
 export default router;

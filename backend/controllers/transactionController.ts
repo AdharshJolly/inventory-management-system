@@ -199,6 +199,28 @@ export const getStocks = async (req: Request, res: Response) => {
   }
 };
 
+// @desc    Update stock record (minLevel)
+// @route   PUT /api/transactions/stocks/:id
+// @access  Private
+export const updateStock = async (req: Request, res: Response) => {
+  try {
+    const { minLevel } = req.body;
+    const stock = await Stock.findByIdAndUpdate(
+      req.params.id,
+      { minLevel },
+      { new: true, runValidators: true }
+    );
+
+    if (!stock) {
+      return res.status(404).json({ message: 'Stock record not found' });
+    }
+
+    res.status(200).json(stock);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Get inventory breakdown across locations
 // @route   GET /api/transactions/stocks/breakdown
 // @access  Private
