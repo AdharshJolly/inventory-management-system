@@ -24,4 +24,6 @@ Adding control to the Inventory visibility view.
 - [x] Task: Alert Level Edit Modal (8ad3410)
   - [x] Create a `SetAlertLevelModal.tsx` or implement inline editing
   - [x] Connect to the backend `PUT` endpoint
-- [~] Task: Conductor - User Manual Verification 'Custom Alerts'
+- [x] Task: Conductor - User Manual Verification 'Custom Alerts'
+
+## Track Complete [checkpoint: ea653bb]
