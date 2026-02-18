@@ -24,6 +24,7 @@ A full-stack Inventory Management System built with React, Node.js (Express), an
 - **Product & Supplier Management:** Full CRUD capabilities for maintaining a robust database of inventory items and vendor details.
 - **Advanced Filtering:** Powerful search and filtering tools to quickly locate specific products or transaction history.
 - **Inventory Breakdown:** Hierarchical view of stock distribution per location with intelligent status indicators.
+- **Customizable Alert Thresholds:** Granular control over low-stock triggers, allowing unique minimum levels for every product at every location.
 
 ## User Experience & Aesthetic
 - **Modern & Vibrant:** Leveraging contemporary UI frameworks (Material Design/Tailwind CSS) for a professional look.
