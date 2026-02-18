@@ -143,14 +143,14 @@ const Inventory: React.FC = () => {
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+            <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 min-w-[600px] sm:min-w-full">
               <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
                 <tr>
-                  <th className="px-6 py-3 font-semibold w-10"></th>
-                  <th className="px-6 py-3 font-semibold">Product</th>
-                  <th className="px-6 py-3 font-semibold">SKU</th>
-                  <th className="px-6 py-3 font-semibold">Total Stock</th>
-                  <th className="px-6 py-3 font-semibold">Status</th>
+                  <th className="px-4 sm:px-6 py-3 font-semibold w-10"></th>
+                  <th className="px-4 sm:px-6 py-3 font-semibold">Product</th>
+                  <th className="px-4 sm:px-6 py-3 font-semibold hidden sm:table-cell">SKU</th>
+                  <th className="px-4 sm:px-6 py-3 font-semibold">Total Stock</th>
+                  <th className="px-4 sm:px-6 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
@@ -160,30 +160,33 @@ const Inventory: React.FC = () => {
                       className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${expandedRows[item._id] ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
                       onClick={() => toggleRow(item._id)}
                     >
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4">
                         {expandedRows[item._id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                       </td>
-                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        {item.name}
+                      <td className="px-4 sm:px-6 py-4 font-medium text-gray-900 dark:text-white">
+                        <div className="flex flex-col">
+                          <span>{item.name}</span>
+                          <span className="sm:hidden text-[10px] text-gray-400 font-mono mt-0.5">{item.sku}</span>
+                        </div>
                       </td>
-                      <td className="px-6 py-4 font-mono text-xs uppercase tracking-wider">
+                      <td className="px-4 sm:px-6 py-4 font-mono text-xs uppercase tracking-wider hidden sm:table-cell">
                         {item.sku}
                       </td>
-                      <td className="px-6 py-4 text-gray-900 dark:text-white font-bold">
+                      <td className="px-4 sm:px-6 py-4 text-gray-900 dark:text-white font-bold">
                         {item.totalQuantity}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4">
                         {getStatusBadge(item.status)}
                       </td>
                     </tr>
                     {expandedRows[item._id] && (
                       <tr>
-                        <td colSpan={5} className="bg-gray-50/50 dark:bg-gray-900/20 px-6 py-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <td colSpan={5} className="bg-gray-50/50 dark:bg-gray-900/20 px-2 sm:px-6 py-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                             {item.locations.map((loc, idx) => (
                               <div 
                                 key={idx} 
-                                className="flex flex-col p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm"
+                                className="flex flex-col p-3 sm:p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm"
                               >
                                 <div className="flex items-center justify-between mb-3">
                                   <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">

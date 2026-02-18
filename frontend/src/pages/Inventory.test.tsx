@@ -55,7 +55,7 @@ describe('Inventory Page', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Product A')).toBeInTheDocument();
-      expect(screen.getByText('SKU-A')).toBeInTheDocument();
+      expect(screen.getAllByText('SKU-A').length).toBeGreaterThan(0);
       expect(screen.getByText('100')).toBeInTheDocument();
       expect(screen.getByText('In Stock')).toBeInTheDocument();
       

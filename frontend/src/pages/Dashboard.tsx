@@ -42,25 +42,25 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white px-1">
         Inventory Overview
       </h1>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Total Products */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4">
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+        <div className="bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4">
+          <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg shrink-0">
             <Package size={24} />
           </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 uppercase truncate">
               Total Products
             </p>
             {loading ? (
               <Skeleton className="h-8 w-16 mt-1" />
             ) : (
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                 {stats?.totalProducts}
               </p>
             )}
@@ -68,18 +68,18 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Stock Value */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4">
-          <div className="p-3 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
+        <div className="bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4">
+          <div className="p-3 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg shrink-0">
             <DollarSign size={24} />
           </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 uppercase truncate">
               Stock Value
             </p>
             {loading ? (
               <Skeleton className="h-8 w-24 mt-1" />
             ) : (
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                 ${stats?.totalStockValue.toFixed(2)}
               </p>
             )}
@@ -87,18 +87,18 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Low Stock Items */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4">
-          <div className="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
+        <div className="bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4">
+          <div className="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg shrink-0">
             <AlertTriangle size={24} />
           </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 uppercase truncate">
               Low Stock Items
             </p>
             {loading ? (
               <Skeleton className="h-8 w-16 mt-1" />
             ) : (
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                 {stats?.lowStockAlerts.length}
               </p>
             )}
@@ -107,7 +107,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Low Stock Table */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
+      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
           <AlertTriangle size={20} className="text-amber-500" />
           Low Stock Alerts
