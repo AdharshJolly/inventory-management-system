@@ -22,9 +22,9 @@ Preparing grouped data for the visibility UI.
   - [x] Implement `GET /api/stocks/breakdown` in `transactionController.ts`
   - [x] Use MongoDB aggregation to group stock by product and include location names
   - [x] Include calculated fields like `totalQuantity` and `status` (In Stock, Low, Out)
-- [ ] Task: Integration Tests
-  - [ ] Write tests for the new breakdown API to ensure correct grouping and math
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Stock Backend'
+- [x] Task: Integration Tests (cd8668f)
+  - [x] Write tests for the new breakdown API to ensure correct grouping and math
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Stock Backend'
 
 ## Phase 3: Inventory Visibility UI
 
