@@ -14,6 +14,7 @@ A full-stack Inventory Management System built with React, Node.js (Express), an
 
 ## Core Goals
 - **Real-time Stock Tracking:** Provide up-to-the-minute visibility into stock levels to eliminate overstocking and prevent stockouts.
+- **Multi-location Visibility:** Track and visualize stock distribution across multiple physical locations in a single unified view.
 - **Transaction Automation:** Streamline the logging of IN/OUT movements with automatic stock adjustments.
 - **Centralized Data Management:** Create a single source of truth for products, suppliers, and their interconnected relationships.
 
@@ -22,7 +23,9 @@ A full-stack Inventory Management System built with React, Node.js (Express), an
 - **Transaction Logging:** A comprehensive audit trail for every stock movement (IN/OUT), ensuring accountability.
 - **Product & Supplier Management:** Full CRUD capabilities for maintaining a robust database of inventory items and vendor details.
 - **Advanced Filtering:** Powerful search and filtering tools to quickly locate specific products or transaction history.
+- **Inventory Breakdown:** Hierarchical view of stock distribution per location with intelligent status indicators.
 
 ## User Experience & Aesthetic
 - **Modern & Vibrant:** Leveraging contemporary UI frameworks (Material Design/Tailwind CSS) for a professional look.
+- **Adaptive Theme:** Support for both Light and Dark modes to accommodate different working environments and user preferences.
 - **Clean & Minimalist:** A focused, clutter-free interface that prioritizes data clarity and ease of operation.
