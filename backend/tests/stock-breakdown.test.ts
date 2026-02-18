@@ -120,4 +120,29 @@ describe('Stock Breakdown API', () => {
     const lowBreakdown = res.body.find((b: any) => b.sku === 'LOW-01');
     expect(lowBreakdown.status).toBe('Low Stock');
   });
+
+  it('should correctly identify Out of Stock status', async () => {
+    // Create a product with no stock
+    const supplier = await Supplier.findOne({ name: 'Stock Supplier' });
+    const outProd = await Product.create({
+      sku: 'OUT-01',
+      name: 'Out Product',
+      supplier: supplier?._id
+    });
+    // Even if a stock record exists with 0
+    await Stock.create({
+      product: outProd._id,
+      location: loc1Id,
+      currentQuantity: 0,
+      minLevel: 5
+    });
+
+    const res = await request(app)
+      .get('/api/transactions/stocks/breakdown')
+      .set('Authorization', `Bearer ${token}`);
+
+    const outBreakdown = res.body.find((b: any) => b.sku === 'OUT-01');
+    expect(outBreakdown.status).toBe('Out of Stock');
+    expect(outBreakdown.totalQuantity).toBe(0);
+  });
 });
