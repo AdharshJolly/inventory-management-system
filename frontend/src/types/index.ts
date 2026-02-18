@@ -13,3 +13,18 @@ export interface AuthState {
   isAuthenticated: boolean;
   loading: boolean;
 }
+
+export interface StockLocationBreakdown {
+  locationName: string;
+  quantity: number;
+}
+
+export interface ProductStockBreakdown {
+  _id: string;
+  name: string;
+  sku: string;
+  totalQuantity: number;
+  totalMinLevel: number;
+  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
+  locations: StockLocationBreakdown[];
+}

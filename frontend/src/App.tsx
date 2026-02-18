@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Suppliers from "./pages/Suppliers";
 import Locations from "./pages/Locations";
+import Inventory from "./pages/Inventory";
 import Profile from "./pages/Profile";
 import TransactionHistory from "./pages/TransactionHistory";
 import TransactionExecution from "./pages/TransactionExecution";
@@ -78,6 +79,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Locations />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/inventory"
+          element={
+            <ProtectedRoute>
+              <Inventory />
             </ProtectedRoute>
           }
         />

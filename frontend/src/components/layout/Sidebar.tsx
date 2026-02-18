@@ -17,6 +17,7 @@ const Sidebar: React.FC = () => {
     { name: "Products", path: "/products", icon: Package },
     { name: "Suppliers", path: "/suppliers", icon: Users },
     { name: "Locations", path: "/locations", icon: MapPin },
+    { name: "Inventory", path: "/inventory", icon: Package },
     { name: "Transactions", path: "/transactions", icon: ArrowLeftRight },
     { name: "History", path: "/history", icon: History },
   ];
