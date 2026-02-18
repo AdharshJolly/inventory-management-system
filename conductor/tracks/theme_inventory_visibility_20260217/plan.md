@@ -4,24 +4,24 @@
 
 Enabling system-wide theme switching.
 
-- [ ] Task: Theme Context and Toggle
-  - [ ] Create `ThemeContext.tsx` to manage dark/light state
-  - [ ] Add a `ThemeToggle` button to the `Navbar` (Moon/Sun icons)
-  - [ ] Update `tailwind.config.ts` if needed for class-based dark mode
-- [ ] Task: Apply Dark Styles
-  - [ ] Update `MainLayout`, `Sidebar`, and `Navbar` with `dark:` classes
-  - [ ] Update common UI components (`Table`, `Modal`, `Button`, `Input`) for dark mode support
-  - [ ] Ensure all pages (Dashboard, Products, etc.) look professional in dark mode
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Dark Mode'
+- [x] Task: Theme Context and Toggle
+  - [x] Create `ThemeContext.tsx` to manage dark/light state
+  - [x] Add a `ThemeToggle` button to the `Navbar` (Moon/Sun icons)
+  - [x] Update `tailwind.config.ts` if needed for class-based dark mode
+- [x] Task: Apply Dark Styles
+  - [x] Update `MainLayout`, `Sidebar`, and `Navbar` with `dark:` classes
+  - [x] Update common UI components (`Table`, `Modal`, `Button`, `Input`) for dark mode support
+  - [x] Ensure all pages (Dashboard, Products, etc.) look professional in dark mode
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Dark Mode'
 
 ## Phase 2: Inventory Breakdown Backend
 
 Preparing grouped data for the visibility UI.
 
-- [ ] Task: Aggregated Stock API
-  - [ ] Implement `GET /api/stocks/breakdown` in `transactionController.ts`
-  - [ ] Use MongoDB aggregation to group stock by product and include location names
-  - [ ] Include calculated fields like `totalQuantity` and `status` (In Stock, Low, Out)
+- [x] Task: Aggregated Stock API (dc74b44)
+  - [x] Implement `GET /api/stocks/breakdown` in `transactionController.ts`
+  - [x] Use MongoDB aggregation to group stock by product and include location names
+  - [x] Include calculated fields like `totalQuantity` and `status` (In Stock, Low, Out)
 - [ ] Task: Integration Tests
   - [ ] Write tests for the new breakdown API to ensure correct grouping and math
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Stock Backend'
