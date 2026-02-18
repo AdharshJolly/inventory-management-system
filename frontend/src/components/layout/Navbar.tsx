@@ -2,11 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Button from "../ui/Button";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Menu } from "lucide-react";
 import NotificationCenter from "./NotificationCenter";
 import ThemeToggle from "./ThemeToggle";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onMenuClick: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
 
   return (
@@ -14,6 +18,13 @@ const Navbar: React.FC = () => {
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-start">
+            <button
+              onClick={onMenuClick}
+              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mr-2"
+              aria-label="Toggle sidebar"
+            >
+              <Menu size={24} />
+            </button>
             <Link to="/" className="flex ml-2 md:mr-24">
               <span className="self-center whitespace-nowrap text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
                 InventoryMS

@@ -7,9 +7,15 @@ import {
   MapPin,
   History,
   ArrowLeftRight,
+  X,
 } from "lucide-react";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -23,7 +29,20 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 pt-20 transition-transform border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+    <aside
+      className={`fixed left-0 top-0 z-40 h-screen w-64 pt-20 transition-transform border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } sm:translate-x-0 sm:block max-sm:shadow-xl`}
+    >
+      <div className="flex sm:hidden justify-end px-4 mb-2">
+        <button
+          onClick={onClose}
+          className="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+          aria-label="Close sidebar"
+        >
+          <X size={20} />
+        </button>
+      </div>
       <div className="h-full overflow-y-auto px-3 pb-4">
         <ul className="space-y-2 font-medium">
           {menuItems.map((item) => {
@@ -34,6 +53,9 @@ const Sidebar: React.FC = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
+                  onClick={() => {
+                    if (window.innerWidth < 640) onClose();
+                  }}
                   className={`flex items-center rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${
                     isActive
                       ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
