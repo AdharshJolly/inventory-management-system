@@ -287,12 +287,13 @@ const Suppliers: React.FC = () => {
           />
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                 <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
                   <tr>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("name")}
                     >
                       <div className="flex items-center">
@@ -300,17 +301,17 @@ const Suppliers: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hidden sm:table-cell"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("contactPerson")}
                     >
                       <div className="flex items-center">
                         Contact <SortIcon column="contactPerson" />
                       </div>
                     </th>
-                    <th className="px-4 sm:px-6 py-3 font-semibold hidden md:table-cell">Email</th>
-                    <th className="px-4 sm:px-6 py-3 font-semibold">Phone</th>
+                    <th className="px-6 py-3 font-semibold">Email</th>
+                    <th className="px-6 py-3 font-semibold">Phone</th>
                     <RoleGuard allowedRoles={["warehouse-manager"]}>
-                      <th className="px-4 sm:px-6 py-3 font-semibold text-right">
+                      <th className="px-6 py-3 font-semibold text-right">
                         Actions
                       </th>
                     </RoleGuard>
@@ -322,43 +323,40 @@ const Suppliers: React.FC = () => {
                       key={s._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="px-4 sm:px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        <div className="flex flex-col">
-                          <span>{s.name}</span>
-                          <span className="sm:hidden text-[10px] text-gray-400 mt-0.5">{s.contactPerson}</span>
-                        </div>
+                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                        {s.name}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <User size={14} className="text-gray-400" />
                           {s.contactPerson}
                         </div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 hidden md:table-cell">
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
                           <Mail size={14} />
                           {s.email}
                         </div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 text-gray-500 dark:text-gray-400">
+                      <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                         <div className="flex items-center gap-2">
                           <Phone size={14} />
                           {s.phone}
                         </div>
                       </td>
                       <RoleGuard allowedRoles={["warehouse-manager"]}>
-                        <td className="px-4 sm:px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-1 sm:gap-2">
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => openEditModal(s)}
-                              className="p-2 sm:p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                               title="Edit"
                             >
                               <Edit2 size={18} />
                             </button>
                             <button
                               onClick={() => openDeleteModal(s._id)}
-                              className="p-2 sm:p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                               title="Delete"
                             >
                               <Trash2 size={18} />
@@ -371,6 +369,53 @@ const Suppliers: React.FC = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="sm:hidden divide-y divide-gray-100 dark:divide-gray-700">
+              {sortedSuppliers.map((s) => (
+                <div key={s._id} className="p-4 bg-white dark:bg-gray-800">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="font-bold text-gray-900 dark:text-white">{s.name}</h3>
+                      <div className="flex items-center gap-1.5 text-sm text-gray-500 mt-1">
+                        <User size={14} className="text-gray-400" />
+                        <span>{s.contactPerson}</span>
+                      </div>
+                    </div>
+                    <RoleGuard allowedRoles={["warehouse-manager"]}>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => openEditModal(s)}
+                          className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                          title="Edit"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                        <button
+                          onClick={() => openDeleteModal(s._id)}
+                          className="p-2 text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg"
+                          title="Delete"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </RoleGuard>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+                      <Mail size={14} />
+                      <span className="truncate">{s.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                      <Phone size={14} />
+                      <span>{s.phone}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}

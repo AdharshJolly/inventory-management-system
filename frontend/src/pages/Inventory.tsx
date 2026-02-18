@@ -142,91 +142,148 @@ const Inventory: React.FC = () => {
             icon={<Package size={48} className="text-gray-300" />}
           />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 min-w-[450px] sm:min-w-full">
-              <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
-                <tr>
-                  <th className="px-3 sm:px-6 py-3 font-semibold w-8"></th>
-                  <th className="px-3 sm:px-6 py-3 font-semibold">Product</th>
-                  <th className="px-4 sm:px-6 py-3 font-semibold hidden sm:table-cell">SKU</th>
-                  <th className="px-3 sm:px-6 py-3 font-semibold">Stock</th>
-                  <th className="px-3 sm:px-6 py-3 font-semibold">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
-                {filteredInventory.map((item) => (
-                  <React.Fragment key={item._id}>
-                    <tr 
-                      className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${expandedRows[item._id] ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
-                      onClick={() => toggleRow(item._id)}
-                    >
-                      <td className="px-3 sm:px-6 py-4">
-                        {expandedRows[item._id] ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        <div className="flex flex-col">
-                          <span className="truncate max-w-[100px] sm:max-w-none">{item.name}</span>
-                          <span className="sm:hidden text-[10px] text-gray-400 font-mono mt-0.5">{item.sku}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 sm:px-6 py-4 font-mono text-xs uppercase tracking-wider hidden sm:table-cell">
-                        {item.sku}
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 text-gray-900 dark:text-white font-bold">
-                        {item.totalQuantity}
-                      </td>
-                      <td className="px-3 sm:px-6 py-4">
-                        {getStatusBadge(item.status)}
-                      </td>
-                    </tr>
-                    {expandedRows[item._id] && (
-                      <tr>
-                        <td colSpan={5} className="bg-gray-50/50 dark:bg-gray-900/20 px-2 sm:px-6 py-4">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                            {item.locations.map((loc, idx) => (
-                              <div 
-                                key={idx} 
-                                className="flex flex-col p-3 sm:p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm"
-                              >
-                                <div className="flex items-center justify-between mb-3">
-                                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                                    <MapPin size={16} className="text-blue-500" />
-                                    <span className="text-sm font-semibold">{loc.locationName}</span>
-                                  </div>
-                                  <span className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {loc.quantity}
-                                  </span>
-                                </div>
-                                
-                                <div className="flex items-center justify-between pt-3 border-t border-gray-50 dark:border-gray-700/50">
-                                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                                    <BellRing size={14} className={loc.quantity <= loc.minLevel ? "text-amber-500" : "text-gray-400"} />
-                                    <span>Alert at: <span className="font-bold text-gray-700 dark:text-gray-300">{loc.minLevel}</span></span>
-                                  </div>
-                                  <button 
-                                    onClick={(e) => handleEditAlert(e, item, loc)}
-                                    className="p-2 sm:p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
-                                    title="Edit Alert Level"
-                                  >
-                                    <Edit2 size={14} />
-                                  </button>
-                                </div>
-                              </div>
-                            ))}
-                            {item.locations.length === 0 && (
-                              <div className="col-span-full py-2 text-center text-sm text-gray-400 italic">
-                                No stock records found for any location.
-                              </div>
-                            )}
-                          </div>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
+                  <tr>
+                    <th className="px-6 py-3 font-semibold w-10"></th>
+                    <th className="px-6 py-3 font-semibold">Product</th>
+                    <th className="px-6 py-3 font-semibold">SKU</th>
+                    <th className="px-6 py-3 font-semibold">Total Stock</th>
+                    <th className="px-6 py-3 font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
+                  {filteredInventory.map((item) => (
+                    <React.Fragment key={item._id}>
+                      <tr 
+                        className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${expandedRows[item._id] ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
+                        onClick={() => toggleRow(item._id)}
+                      >
+                        <td className="px-6 py-4">
+                          {expandedRows[item._id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                        </td>
+                        <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                          {item.name}
+                        </td>
+                        <td className="px-6 py-4 font-mono text-xs uppercase tracking-wider">
+                          {item.sku}
+                        </td>
+                        <td className="px-6 py-4 text-gray-900 dark:text-white font-bold">
+                          {item.totalQuantity}
+                        </td>
+                        <td className="px-6 py-4">
+                          {getStatusBadge(item.status)}
                         </td>
                       </tr>
-                    )}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      {expandedRows[item._id] && (
+                        <tr>
+                          <td colSpan={5} className="bg-gray-50/50 dark:bg-gray-900/20 px-6 py-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {item.locations.map((loc, idx) => (
+                                <div 
+                                  key={idx} 
+                                  className="flex flex-col p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm"
+                                >
+                                  <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                                      <MapPin size={16} className="text-blue-500" />
+                                      <span className="text-sm font-semibold">{loc.locationName}</span>
+                                    </div>
+                                    <span className="text-lg font-bold text-gray-900 dark:text-white">
+                                      {loc.quantity}
+                                    </span>
+                                  </div>
+                                  
+                                  <div className="flex items-center justify-between pt-3 border-t border-gray-50 dark:border-gray-700/50">
+                                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                      <BellRing size={14} className={loc.quantity <= loc.minLevel ? "text-amber-500" : "text-gray-400"} />
+                                      <span>Alert at: <span className="font-bold text-gray-700 dark:text-gray-300">{loc.minLevel}</span></span>
+                                    </div>
+                                    <button 
+                                      onClick={(e) => handleEditAlert(e, item, loc)}
+                                      className="p-2 sm:p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
+                                      title="Edit Alert Level"
+                                    >
+                                      <Edit2 size={14} />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="sm:hidden divide-y divide-gray-100 dark:divide-gray-700">
+              {filteredInventory.map((item) => (
+                <div key={item._id} className="p-4 bg-white dark:bg-gray-800">
+                  <div 
+                    className="flex items-start justify-between cursor-pointer"
+                    onClick={() => toggleRow(item._id)}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-gray-900 dark:text-white truncate">{item.name}</h3>
+                      <p className="text-[10px] text-gray-400 font-mono mt-0.5">{item.sku}</p>
+                      <div className="mt-2 flex items-center gap-3">
+                        <span className="text-lg font-black text-blue-600 dark:text-blue-400">{item.totalQuantity}</span>
+                        {getStatusBadge(item.status)}
+                      </div>
+                    </div>
+                    <div className="p-2 text-gray-400">
+                      {expandedRows[item._id] ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </div>
+                  </div>
+
+                  {expandedRows[item._id] && (
+                    <div className="mt-4 space-y-3 pt-4 border-t border-gray-50 dark:border-gray-700/50">
+                      <p className="text-[10px] uppercase font-bold text-gray-400 tracking-widest px-1">Location Breakdown</p>
+                      <div className="grid grid-cols-1 gap-3">
+                        {item.locations.map((loc, idx) => (
+                          <div 
+                            key={idx} 
+                            className="flex flex-col p-3 bg-gray-50 dark:bg-gray-900/40 rounded-xl border border-gray-100 dark:border-gray-700"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                                <MapPin size={14} className="text-blue-500" />
+                                <span className="text-xs font-semibold">{loc.locationName}</span>
+                              </div>
+                              <span className="text-base font-bold text-gray-900 dark:text-white">
+                                {loc.quantity}
+                              </span>
+                            </div>
+                            
+                            <div className="flex items-center justify-between pt-2 border-t border-gray-200/50 dark:border-gray-700/50">
+                              <div className="flex items-center gap-2 text-[10px] text-gray-500 dark:text-gray-400">
+                                <BellRing size={12} className={loc.quantity <= loc.minLevel ? "text-amber-500" : "text-gray-400"} />
+                                <span>Alert Threshold: <span className="font-bold text-gray-700 dark:text-gray-300">{loc.minLevel}</span></span>
+                              </div>
+                              <button 
+                                onClick={(e) => handleEditAlert(e, item, loc)}
+                                className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                                title="Edit Alert Level"
+                              >
+                                <Edit2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 

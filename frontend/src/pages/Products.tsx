@@ -337,12 +337,13 @@ const Products: React.FC = () => {
           />
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                 <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
                   <tr>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("name")}
                     >
                       <div className="flex items-center">
@@ -350,7 +351,7 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hidden sm:table-cell"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("sku")}
                     >
                       <div className="flex items-center">
@@ -358,7 +359,7 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hidden lg:table-cell"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("category")}
                     >
                       <div className="flex items-center">
@@ -366,16 +367,16 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("basePrice")}
                     >
                       <div className="flex items-center">
                         Price <SortIcon column="basePrice" />
                       </div>
                     </th>
-                    <th className="px-4 sm:px-6 py-3 font-semibold hidden md:table-cell">Supplier</th>
+                    <th className="px-6 py-3 font-semibold">Supplier</th>
                     <RoleGuard allowedRoles={["warehouse-manager"]}>
-                      <th className="px-4 sm:px-6 py-3 font-semibold text-right">
+                      <th className="px-6 py-3 font-semibold text-right">
                         Actions
                       </th>
                     </RoleGuard>
@@ -387,14 +388,11 @@ const Products: React.FC = () => {
                       key={p._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="px-4 sm:px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        <div className="flex flex-col">
-                          <span>{p.name}</span>
-                          <span className="sm:hidden text-[10px] text-gray-400 font-mono mt-0.5">{p.sku}</span>
-                        </div>
+                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                        {p.name}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 font-mono text-xs hidden sm:table-cell">{p.sku}</td>
-                      <td className="px-4 sm:px-6 py-4 hidden lg:table-cell">
+                      <td className="px-6 py-4 font-mono text-xs">{p.sku}</td>
+                      <td className="px-6 py-4">
                         <span className="flex items-center gap-1">
                           <Tag
                             size={12}
@@ -403,25 +401,25 @@ const Products: React.FC = () => {
                           {p.category}
                         </span>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 text-gray-900 dark:text-white font-semibold whitespace-nowrap">
+                      <td className="px-6 py-4 text-gray-900 dark:text-white font-semibold">
                         ${p.basePrice.toFixed(2)}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 text-blue-600 dark:text-blue-400 hidden md:table-cell">
+                      <td className="px-6 py-4 text-blue-600 dark:text-blue-400">
                         {p.supplier?.name}
                       </td>
                       <RoleGuard allowedRoles={["warehouse-manager"]}>
-                        <td className="px-4 sm:px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-1 sm:gap-2">
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => openEditModal(p)}
-                              className="p-2 sm:p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                               title="Edit"
                             >
                               <Edit2 size={18} />
                             </button>
                             <button
                               onClick={() => openDeleteModal(p._id)}
-                              className="p-2 sm:p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                               title="Delete"
                             >
                               <Trash2 size={18} />
@@ -434,6 +432,53 @@ const Products: React.FC = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="sm:hidden divide-y divide-gray-100 dark:divide-gray-700">
+              {sortedProducts.map((p) => (
+                <div key={p._id} className="p-4 bg-white dark:bg-gray-800">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h3 className="font-bold text-gray-900 dark:text-white">{p.name}</h3>
+                      <p className="text-[10px] text-gray-400 font-mono mt-0.5">{p.sku}</p>
+                    </div>
+                    <RoleGuard allowedRoles={["warehouse-manager"]}>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => openEditModal(p)}
+                          className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                          title="Edit"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                        <button
+                          onClick={() => openDeleteModal(p._id)}
+                          className="p-2 text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg"
+                          title="Delete"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </RoleGuard>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mt-3 text-sm">
+                    <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
+                      <Tag size={14} className="text-gray-400" />
+                      <span>{p.category}</span>
+                    </div>
+                    <div className="flex items-center justify-end font-bold text-gray-900 dark:text-white">
+                      ${p.basePrice.toFixed(2)}
+                    </div>
+                    <div className="col-span-2 pt-2 mt-1 border-t border-gray-50 dark:border-gray-700/50 flex justify-between items-center text-xs">
+                      <span className="text-gray-400 uppercase tracking-wider font-semibold">Supplier</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium">{p.supplier?.name}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}

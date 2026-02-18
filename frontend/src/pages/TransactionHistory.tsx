@@ -129,22 +129,23 @@ const TransactionHistory: React.FC = () => {
           />
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                 <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
                   <tr>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("createdAt")}
                     >
                       <div className="flex items-center">
                         Date <SortIcon column="createdAt" />
                       </div>
                     </th>
-                    <th className="px-4 sm:px-6 py-3 font-semibold">Product</th>
-                    <th className="px-4 sm:px-6 py-3 font-semibold hidden md:table-cell">Location</th>
+                    <th className="px-6 py-3 font-semibold">Product</th>
+                    <th className="px-6 py-3 font-semibold">Location</th>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("type")}
                     >
                       <div className="flex items-center">
@@ -152,15 +153,15 @@ const TransactionHistory: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("quantity")}
                     >
                       <div className="flex items-center">
                         Qty <SortIcon column="quantity" />
                       </div>
                     </th>
-                    <th className="px-4 sm:px-6 py-3 font-semibold hidden lg:table-cell">Notes</th>
-                    <th className="px-4 sm:px-6 py-3 font-semibold hidden sm:table-cell">User</th>
+                    <th className="px-6 py-3 font-semibold">Notes</th>
+                    <th className="px-6 py-3 font-semibold">User</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
@@ -169,21 +170,21 @@ const TransactionHistory: React.FC = () => {
                       key={t._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs">
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs">
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
                           {new Date(t.createdAt).toLocaleDateString()}
                         </div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4">
-                        <div className="font-medium text-gray-900 dark:text-white truncate max-w-[120px] sm:max-w-none">
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900 dark:text-white">
                           {t.product?.name}
                         </div>
-                        <div className="text-[10px] text-gray-500 dark:text-gray-400 font-mono">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">
                           {t.product?.sku}
                         </div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 hidden md:table-cell">
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-1.5 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded w-fit">
                           <MapPin size={12} className="text-gray-400" />
                           <span className="text-xs font-medium">
@@ -191,7 +192,7 @@ const TransactionHistory: React.FC = () => {
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4">
+                      <td className="px-6 py-4">
                         <span
                           className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                             t.type === "IN"
@@ -202,16 +203,16 @@ const TransactionHistory: React.FC = () => {
                           {t.type}
                         </span>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 font-mono font-medium text-gray-900 dark:text-white">
+                      <td className="px-6 py-4 font-mono font-medium text-gray-900 dark:text-white">
                         {t.quantity}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 max-w-xs truncate text-gray-500 dark:text-gray-400 hidden lg:table-cell">
+                      <td className="px-6 py-4 max-w-xs truncate text-gray-500 dark:text-gray-400">
                         <div className="flex items-center gap-2">
                           <ClipboardList size={14} className="flex-shrink-0" />
                           <span className="truncate">{t.notes}</span>
                         </div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 text-gray-500 dark:text-gray-400 text-xs hidden sm:table-cell">
+                      <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs">
                         {t.user?.name}
                       </td>
                     </tr>
@@ -219,6 +220,56 @@ const TransactionHistory: React.FC = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="sm:hidden divide-y divide-gray-100 dark:divide-gray-700">
+              {sortedTransactions.map((t) => (
+                <div key={t._id} className="p-4 bg-white dark:bg-gray-800">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h3 className="font-bold text-gray-900 dark:text-white truncate max-w-[200px]">
+                        {t.product?.name}
+                      </h3>
+                      <p className="text-[10px] text-gray-400 font-mono mt-0.5">{t.product?.sku}</p>
+                    </div>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        t.type === "IN"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {t.type}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-4 mt-3 text-sm">
+                    <div className="col-span-2 flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                      <MapPin size={14} className="text-blue-500" />
+                      <span className="font-medium">{t.location?.name || "N/A"}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                      <Calendar size={14} />
+                      <span className="text-xs">{new Date(t.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-end gap-1 font-bold text-gray-900 dark:text-white">
+                      <span className="text-xs font-normal text-gray-400 uppercase mr-1">Qty</span>
+                      {t.quantity}
+                    </div>
+                    
+                    {t.notes && (
+                      <div className="col-span-2 pt-2 border-t border-gray-50 dark:border-gray-700/50 flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+                        <ClipboardList size={14} className="mt-0.5 shrink-0" />
+                        <span className="line-clamp-2">{t.notes}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
