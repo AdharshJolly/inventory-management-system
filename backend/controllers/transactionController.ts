@@ -198,3 +198,68 @@ export const getStocks = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc    Get inventory breakdown across locations
+// @route   GET /api/transactions/stocks/breakdown
+// @access  Private
+export const getStockBreakdown = async (req: Request, res: Response) => {
+  try {
+    const breakdown = await Stock.aggregate([
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'product',
+          foreignField: '_id',
+          as: 'productInfo'
+        }
+      },
+      { $unwind: '$productInfo' },
+      {
+        $lookup: {
+          from: 'locations',
+          localField: 'location',
+          foreignField: '_id',
+          as: 'locationInfo'
+        }
+      },
+      { $unwind: '$locationInfo' },
+      {
+        $group: {
+          _id: '$product',
+          name: { $first: '$productInfo.name' },
+          sku: { $first: '$productInfo.sku' },
+          totalQuantity: { $sum: '$currentQuantity' },
+          totalMinLevel: { $sum: '$minLevel' },
+          locations: {
+            $push: {
+              locationName: '$locationInfo.name',
+              quantity: '$currentQuantity'
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          status: {
+            $cond: [
+              { $eq: ['$totalQuantity', 0] },
+              'Out of Stock',
+              {
+                $cond: [
+                  { $lte: ['$totalQuantity', '$totalMinLevel'] },
+                  'Low Stock',
+                  'In Stock'
+                ]
+              }
+            ]
+          }
+        }
+      },
+      { $sort: { name: 1 } }
+    ]);
+
+    res.status(200).json(breakdown);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -2,7 +2,8 @@ import express from 'express';
 import {
   getTransactions,
   createTransaction,
-  getStocks
+  getStocks,
+  getStockBreakdown
 } from '../controllers/transactionController';
 import { protect } from '../middleware/authMiddleware';
 
@@ -15,5 +16,6 @@ router.route('/')
   .post(createTransaction);
 
 router.get('/stocks', getStocks);
+router.get('/stocks/breakdown', getStockBreakdown);
 
 export default router;
