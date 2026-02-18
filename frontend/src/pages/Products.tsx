@@ -342,7 +342,7 @@ const Products: React.FC = () => {
                 <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
                   <tr>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("name")}
                     >
                       <div className="flex items-center">
@@ -350,7 +350,7 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hidden sm:table-cell"
                       onClick={() => handleSort("sku")}
                     >
                       <div className="flex items-center">
@@ -358,7 +358,7 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hidden lg:table-cell"
                       onClick={() => handleSort("category")}
                     >
                       <div className="flex items-center">
@@ -366,16 +366,16 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("basePrice")}
                     >
                       <div className="flex items-center">
                         Price <SortIcon column="basePrice" />
                       </div>
                     </th>
-                    <th className="px-6 py-3 font-semibold">Supplier</th>
+                    <th className="px-4 sm:px-6 py-3 font-semibold hidden md:table-cell">Supplier</th>
                     <RoleGuard allowedRoles={["warehouse-manager"]}>
-                      <th className="px-6 py-3 font-semibold text-right">
+                      <th className="px-4 sm:px-6 py-3 font-semibold text-right">
                         Actions
                       </th>
                     </RoleGuard>
@@ -387,11 +387,14 @@ const Products: React.FC = () => {
                       key={p._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        {p.name}
+                      <td className="px-4 sm:px-6 py-4 font-medium text-gray-900 dark:text-white">
+                        <div className="flex flex-col">
+                          <span>{p.name}</span>
+                          <span className="sm:hidden text-[10px] text-gray-400 font-mono mt-0.5">{p.sku}</span>
+                        </div>
                       </td>
-                      <td className="px-6 py-4 font-mono text-xs">{p.sku}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4 font-mono text-xs hidden sm:table-cell">{p.sku}</td>
+                      <td className="px-4 sm:px-6 py-4 hidden lg:table-cell">
                         <span className="flex items-center gap-1">
                           <Tag
                             size={12}
@@ -400,14 +403,14 @@ const Products: React.FC = () => {
                           {p.category}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-900 dark:text-white font-semibold">
+                      <td className="px-4 sm:px-6 py-4 text-gray-900 dark:text-white font-semibold whitespace-nowrap">
                         ${p.basePrice.toFixed(2)}
                       </td>
-                      <td className="px-6 py-4 text-blue-600 dark:text-blue-400">
+                      <td className="px-4 sm:px-6 py-4 text-blue-600 dark:text-blue-400 hidden md:table-cell">
                         {p.supplier?.name}
                       </td>
                       <RoleGuard allowedRoles={["warehouse-manager"]}>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-4 sm:px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-1 sm:gap-2">
                             <button
                               onClick={() => openEditModal(p)}

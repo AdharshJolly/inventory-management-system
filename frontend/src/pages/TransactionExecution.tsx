@@ -115,7 +115,7 @@ const TransactionExecution: React.FC = () => {
         </h1>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 p-5 sm:p-8 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
         {error && (
           <div className="mb-6 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-4 rounded-lg flex items-center gap-2 border border-red-100 dark:border-red-800 text-sm">
             <AlertCircle size={18} className="shrink-0" />

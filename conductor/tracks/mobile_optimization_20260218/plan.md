@@ -22,12 +22,12 @@ Implementing the core drawer mechanism.
 
 Optimizing individual elements for thumbs.
 
-- [~] Task: Button & Icon Touch Targets
-  - [ ] Audit and update `Button.tsx` and common icons for minimum 44x44px targets
+- [x] Task: Button & Icon Touch Targets (c3dbb4f)
+  - [x] Audit and update `Button.tsx` and common icons for minimum 44x44px targets
 - [x] Task: Table Mobile View (f01ebdc)
   - [x] Enhance `Table.tsx` with better horizontal scroll indicators
   - [x] Update `Inventory.tsx` expanded view for tighter mobile spacing
-- [ ] Task: Conductor - User Manual Verification 'Components'
+- [~] Task: Conductor - User Manual Verification 'Components'
 
 ## Phase 3: Final Polish
 

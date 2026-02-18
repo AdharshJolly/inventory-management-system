@@ -272,7 +272,7 @@ const Locations: React.FC = () => {
                 <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
                   <tr>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("name")}
                     >
                       <div className="flex items-center">
@@ -280,16 +280,16 @@ const Locations: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-4 sm:px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleSort("type")}
                     >
                       <div className="flex items-center">
                         Type <SortIcon column="type" />
                       </div>
                     </th>
-                    <th className="px-6 py-3 font-semibold">Description</th>
+                    <th className="px-4 sm:px-6 py-3 font-semibold hidden md:table-cell">Description</th>
                     <RoleGuard allowedRoles={["warehouse-manager"]}>
-                      <th className="px-6 py-3 font-semibold text-right">
+                      <th className="px-4 sm:px-6 py-3 font-semibold text-right">
                         Actions
                       </th>
                     </RoleGuard>
@@ -301,30 +301,30 @@ const Locations: React.FC = () => {
                       key={loc._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                      <td className="px-4 sm:px-6 py-4 font-medium text-gray-900 dark:text-white">
                         {loc.name}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4">
                         <span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-400">
                           {loc.type}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                      <td className="px-4 sm:px-6 py-4 text-gray-500 dark:text-gray-400 hidden md:table-cell">
                         {loc.description}
                       </td>
                       <RoleGuard allowedRoles={["warehouse-manager"]}>
-                        <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
+                        <td className="px-4 sm:px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-1 sm:gap-2">
                             <button
                               onClick={() => openEditModal(loc)}
-                              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                              className="p-2 sm:p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                               title="Edit"
                             >
                               <Edit2 size={18} />
                             </button>
                             <button
                               onClick={() => openDeleteModal(loc._id)}
-                              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                              className="p-2 sm:p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                               title="Delete"
                             >
                               <Trash2 size={18} />
