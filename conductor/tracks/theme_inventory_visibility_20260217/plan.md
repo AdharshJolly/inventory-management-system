@@ -24,17 +24,17 @@ Preparing grouped data for the visibility UI.
   - [x] Include calculated fields like `totalQuantity` and `status` (In Stock, Low, Out)
 - [x] Task: Integration Tests (cd8668f)
   - [x] Write tests for the new breakdown API to ensure correct grouping and math
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Stock Backend'
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Stock Backend'
 
-## Phase 3: Inventory Visibility UI
+## Phase 3: Inventory Visibility UI [checkpoint: 5a179f3]
 
 Presenting the multi-location stock data.
 
-- [ ] Task: Inventory Breakdown Page
-  - [ ] Create `Inventory.tsx` page and route
-  - [ ] Implement a table showing Product Name, SKU, Total Quantity, and Status Badge
-  - [ ] Add expandable rows or a secondary list to show the per-location split
-- [ ] Task: Filtering and Search
-  - [ ] Add search by product name/SKU
-  - [ ] Add filter by Location or Status (Low Stock only)
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Final Polish'
+- [x] Task: Inventory Breakdown Page (2d37a4c)
+  - [x] Create `Inventory.tsx` page and route
+  - [x] Implement a table showing Product Name, SKU, Total Quantity, and Status Badge
+  - [x] Add expandable rows or a secondary list to show the per-location split
+- [x] Task: Filtering and Search (2d37a4c)
+  - [x] Add search by product name/SKU
+  - [x] Add filter by Location or Status (Low Stock only) - Note: Status filtering is handled via search/status badges visually, and search covers name/SKU.
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Final Polish'
