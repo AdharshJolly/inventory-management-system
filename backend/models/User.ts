@@ -36,9 +36,9 @@ const UserSchema: Schema = new Schema({
 });
 
 // Encrypt password using bcrypt
-UserSchema.pre<IUser>('save', async function(next) {
+UserSchema.pre<IUser>('save', async function() {
   if (!this.isModified('password')) {
-    next();
+    return;
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
