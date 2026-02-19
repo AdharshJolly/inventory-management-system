@@ -195,23 +195,35 @@ const Products: React.FC = () => {
 
   const SortIcon = ({ column }: { column: string }) => {
     if (sortConfig.key !== column)
-      return <ArrowUpDown size={14} className="ml-1 opacity-50" />;
+      return <ArrowUpDown size={13} className="ml-1 opacity-40" />;
     return sortConfig.direction === "asc" ? (
-      <ArrowUp size={14} className="ml-1 text-blue-600" />
+      <ArrowUp
+        size={13}
+        className="ml-1 text-indigo-600 dark:text-indigo-400"
+      />
     ) : (
-      <ArrowDown size={14} className="ml-1 text-blue-600" />
+      <ArrowDown
+        size={13}
+        className="ml-1 text-indigo-600 dark:text-indigo-400"
+      />
     );
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center px-1">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-          Product Catalog
-        </h1>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+            Product Catalog
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Manage your products and pricing
+          </p>
+        </div>
         <RoleGuard allowedRoles={["warehouse-manager"]}>
           <Button className="gap-2 hidden sm:flex" onClick={openAddModal}>
-            <Plus size={18} />
+            <Plus size={16} />
             Add Product
           </Button>
         </RoleGuard>
@@ -249,16 +261,16 @@ const Products: React.FC = () => {
             {...register("basePrice")}
             error={errors.basePrice?.message}
           />
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div className="space-y-1.5">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
               Supplier
             </label>
             <select
               {...register("supplier")}
-              className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 dark:text-gray-200 ${
+              className={`block w-full px-3.5 py-2.5 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 dark:text-gray-200 transition-colors ${
                 errors.supplier
                   ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600"
+                  : "border-gray-200 dark:border-gray-600"
               }`}
             >
               <option value="">Select a supplier</option>
@@ -274,7 +286,7 @@ const Products: React.FC = () => {
               </p>
             )}
           </div>
-          <div className="flex justify-end gap-3 mt-6">
+          <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-700/50">
             <Button
               type="button"
               variant="secondary"
@@ -298,27 +310,34 @@ const Products: React.FC = () => {
         loading={submitting}
       />
 
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div className="flex items-center gap-4 w-full sm:w-auto">
-          <Search className="text-gray-400" size={20} />
+      {/* Search Bar */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-center bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-2xl shadow-sm border border-gray-100/80 dark:border-gray-700/60">
+        <div className="flex items-center gap-3 flex-1">
+          <div className="p-2 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-400">
+            <Search size={18} />
+          </div>
           <Input
             placeholder="Search by name or SKU..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="border-none focus:ring-0"
+            className="border-none focus:ring-0 shadow-none"
           />
         </div>
         <RoleGuard allowedRoles={["warehouse-manager"]}>
-          <Button className="gap-2 w-full sm:w-auto sm:hidden" onClick={openAddModal}>
-            <Plus size={18} />
+          <Button
+            className="gap-2 w-full sm:w-auto sm:hidden"
+            onClick={openAddModal}
+          >
+            <Plus size={16} />
             Add Product
           </Button>
         </RoleGuard>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      {/* Table Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100/80 dark:border-gray-700/60 overflow-hidden">
         {loading ? (
-          <div className="p-6 space-y-4">
+          <div className="p-6 space-y-3">
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
@@ -329,7 +348,9 @@ const Products: React.FC = () => {
           <EmptyState
             title="No products found"
             description="Your inventory is empty. Start by adding your first product to track."
-            icon={<Package size={48} className="text-gray-300" />}
+            icon={
+              <Package size={48} className="text-gray-300 dark:text-gray-600" />
+            }
             action={
               <RoleGuard allowedRoles={["warehouse-manager"]}>
                 <Button
@@ -337,7 +358,7 @@ const Products: React.FC = () => {
                   variant="outline"
                   className="gap-2"
                 >
-                  <Plus size={18} />
+                  <Plus size={16} />
                   Add First Product
                 </Button>
               </RoleGuard>
@@ -348,10 +369,10 @@ const Products: React.FC = () => {
             {/* Desktop Table View */}
             <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-                <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
+                <thead className="bg-gray-50/80 dark:bg-gray-800/50 border-b border-gray-100/80 dark:border-gray-700/50">
                   <tr>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 cursor-pointer hover:bg-gray-100/60 dark:hover:bg-gray-700/40 transition-colors"
                       onClick={() => handleSort("name")}
                     >
                       <div className="flex items-center">
@@ -359,7 +380,7 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 cursor-pointer hover:bg-gray-100/60 dark:hover:bg-gray-700/40 transition-colors"
                       onClick={() => handleSort("sku")}
                     >
                       <div className="flex items-center">
@@ -367,7 +388,7 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 cursor-pointer hover:bg-gray-100/60 dark:hover:bg-gray-700/40 transition-colors"
                       onClick={() => handleSort("category")}
                     >
                       <div className="flex items-center">
@@ -375,62 +396,66 @@ const Products: React.FC = () => {
                       </div>
                     </th>
                     <th
-                      className="px-6 py-3 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 cursor-pointer hover:bg-gray-100/60 dark:hover:bg-gray-700/40 transition-colors"
                       onClick={() => handleSort("basePrice")}
                     >
                       <div className="flex items-center">
                         Price <SortIcon column="basePrice" />
                       </div>
                     </th>
-                    <th className="px-6 py-3 font-semibold">Supplier</th>
+                    <th className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      Supplier
+                    </th>
                     <RoleGuard allowedRoles={["warehouse-manager"]}>
-                      <th className="px-6 py-3 font-semibold text-right">
+                      <th className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-right">
                         Actions
                       </th>
                     </RoleGuard>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
+                <tbody className="divide-y divide-gray-100/80 dark:divide-gray-700/50">
                   {sortedProducts.map((p) => (
                     <tr
                       key={p._id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors"
                     >
-                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                      <td className="px-6 py-3.5 font-semibold text-gray-900 dark:text-white text-sm">
                         {p.name}
                       </td>
-                      <td className="px-6 py-4 font-mono text-xs">{p.sku}</td>
-                      <td className="px-6 py-4">
-                        <span className="flex items-center gap-1">
+                      <td className="px-6 py-3.5 font-mono text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        {p.sku}
+                      </td>
+                      <td className="px-6 py-3.5">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-50 dark:bg-gray-700/40 text-xs font-medium text-gray-600 dark:text-gray-300">
                           <Tag
-                            size={12}
+                            size={11}
                             className="text-gray-400 dark:text-gray-500"
                           />
                           {p.category}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-900 dark:text-white font-semibold">
-                        ${p.basePrice.toFixed(2)}
+                      <td className="px-6 py-3.5 text-gray-900 dark:text-white font-bold text-sm">
+                        ₹{p.basePrice.toFixed(2)}
                       </td>
-                      <td className="px-6 py-4 text-blue-600 dark:text-blue-400">
+                      <td className="px-6 py-3.5 text-indigo-600 dark:text-indigo-400 font-medium text-sm">
                         {p.supplier?.name}
                       </td>
                       <RoleGuard allowedRoles={["warehouse-manager"]}>
-                        <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
+                        <td className="px-6 py-3.5 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => openEditModal(p)}
-                              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                              className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all"
                               title="Edit"
                             >
-                              <Edit2 size={18} />
+                              <Edit2 size={16} />
                             </button>
                             <button
                               onClick={() => openDeleteModal(p._id)}
-                              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
                               title="Delete"
                             >
-                              <Trash2 size={18} />
+                              <Trash2 size={16} />
                             </button>
                           </div>
                         </td>
@@ -442,45 +467,55 @@ const Products: React.FC = () => {
             </div>
 
             {/* Mobile Card View */}
-            <div className="sm:hidden divide-y divide-gray-100 dark:divide-gray-700">
+            <div className="sm:hidden divide-y divide-gray-100/80 dark:divide-gray-700/50">
               {sortedProducts.map((p) => (
-                <div key={p._id} className="p-4 bg-white dark:bg-gray-800">
+                <div key={p._id} className="p-4">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="font-bold text-gray-900 dark:text-white">{p.name}</h3>
-                      <p className="text-[10px] text-gray-400 font-mono mt-0.5">{p.sku}</p>
+                      <h3 className="font-bold text-gray-900 dark:text-white text-sm">
+                        {p.name}
+                      </h3>
+                      <p className="text-[10px] text-gray-400 font-mono mt-0.5 uppercase tracking-wider">
+                        {p.sku}
+                      </p>
                     </div>
                     <RoleGuard allowedRoles={["warehouse-manager"]}>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => openEditModal(p)}
-                          className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                          className="p-2 text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl"
                           title="Edit"
                         >
-                          <Edit2 size={16} />
+                          <Edit2 size={15} />
                         </button>
                         <button
                           onClick={() => openDeleteModal(p._id)}
-                          className="p-2 text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg"
+                          className="p-2 text-red-600 bg-red-50 dark:bg-red-900/20 rounded-xl"
                           title="Delete"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </RoleGuard>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-2 mt-3 text-sm">
                     <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-                      <Tag size={14} className="text-gray-400" />
-                      <span>{p.category}</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-gray-50 dark:bg-gray-700/40 text-xs">
+                        <Tag size={11} className="text-gray-400" />
+                        {p.category}
+                      </span>
                     </div>
                     <div className="flex items-center justify-end font-bold text-gray-900 dark:text-white">
-                      ${p.basePrice.toFixed(2)}
+                      ₹{p.basePrice.toFixed(2)}
                     </div>
-                    <div className="col-span-2 pt-2 mt-1 border-t border-gray-50 dark:border-gray-700/50 flex justify-between items-center text-xs">
-                      <span className="text-gray-400 uppercase tracking-wider font-semibold">Supplier</span>
-                      <span className="text-blue-600 dark:text-blue-400 font-medium">{p.supplier?.name}</span>
+                    <div className="col-span-2 pt-2 mt-1 border-t border-gray-100/60 dark:border-gray-700/40 flex justify-between items-center text-xs">
+                      <span className="text-gray-400 uppercase tracking-wider font-bold">
+                        Supplier
+                      </span>
+                      <span className="text-indigo-600 dark:text-indigo-400 font-semibold">
+                        {p.supplier?.name}
+                      </span>
                     </div>
                   </div>
                 </div>

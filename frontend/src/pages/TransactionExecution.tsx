@@ -88,7 +88,7 @@ const TransactionExecution: React.FC = () => {
     return (
       <div className="max-w-2xl mx-auto space-y-6">
         <Skeleton className="h-10 w-48" />
-        <Skeleton className="h-96 w-full rounded-xl" />
+        <Skeleton className="h-96 w-full rounded-2xl" />
       </div>
     );
 
@@ -107,17 +107,22 @@ const TransactionExecution: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
-          <ArrowLeftRight size={24} />
+        <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-blue-500 text-white rounded-xl shadow-lg shadow-indigo-500/20">
+          <ArrowLeftRight size={22} />
         </div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-          Execute Stock Movement
-        </h1>
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+            Execute Stock Movement
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+            Record inventory changes
+          </p>
+        </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-5 sm:p-8 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 p-5 sm:p-8 rounded-2xl shadow-sm border border-gray-100/80 dark:border-gray-700/60">
         {error && (
-          <div className="mb-6 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-4 rounded-lg flex items-center gap-2 border border-red-100 dark:border-red-800 text-sm">
+          <div className="mb-6 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-xl flex items-center gap-2.5 border border-red-200/60 dark:border-red-800/40 text-sm">
             <AlertCircle size={18} className="shrink-0" />
             {error}
           </div>
@@ -146,17 +151,17 @@ const TransactionExecution: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Movement Type
               </label>
-              <div className="flex rounded-md shadow-sm h-10">
+              <div className="flex rounded-xl shadow-sm h-11 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, type: "IN" })}
-                  className={`flex-1 px-4 py-2 text-sm font-medium rounded-l-md border ${
+                  className={`flex-1 px-4 py-2.5 text-sm font-semibold border transition-all ${
                     formData.type === "IN"
-                      ? "bg-green-600 text-white border-green-600"
-                      : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      ? "bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20"
+                      : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
                   }`}
                 >
                   STOCK IN
@@ -164,10 +169,10 @@ const TransactionExecution: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, type: "OUT" })}
-                  className={`flex-1 px-4 py-2 text-sm font-medium rounded-r-md border-t border-r border-b ${
+                  className={`flex-1 px-4 py-2.5 text-sm font-semibold border-t border-r border-b transition-all ${
                     formData.type === "OUT"
-                      ? "bg-red-600 text-white border-red-600"
-                      : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      ? "bg-gradient-to-r from-red-500 to-rose-500 text-white border-red-500 shadow-lg shadow-red-500/20"
+                      : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
                   }`}
                 >
                   STOCK OUT
@@ -198,7 +203,7 @@ const TransactionExecution: React.FC = () => {
 
           <Button
             type="submit"
-            className="w-full py-6 text-lg"
+            className="w-full py-3 text-base"
             loading={submitting}
           >
             Complete Transaction

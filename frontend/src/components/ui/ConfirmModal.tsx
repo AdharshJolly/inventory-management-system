@@ -31,12 +31,12 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       <div className="space-y-6">
         <div className="flex items-start gap-4">
           <div
-            className={`p-2 rounded-full ${
+            className={`p-2.5 rounded-xl ${
               variant === "danger"
                 ? "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400"
                 : variant === "warning"
                   ? "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
-                  : "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                  : "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
             }`}
           >
             <AlertTriangle size={24} />
@@ -46,7 +46,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </p>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100/80 dark:border-gray-700/50">
           <Button
             type="button"
             variant="secondary"

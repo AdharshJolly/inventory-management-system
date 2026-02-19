@@ -103,17 +103,17 @@ const Profile: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           Account Settings
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">
+        <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
           Manage your profile information and security preferences.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-1">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-base font-bold text-gray-900 dark:text-white mb-1.5">
             Profile Information
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
@@ -122,7 +122,7 @@ const Profile: React.FC = () => {
         </div>
 
         <div className="md:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100/80 dark:border-gray-700/60 p-6">
             <form
               onSubmit={handleProfileSubmit(onProfileSubmit)}
               className="space-y-4"
@@ -140,10 +140,13 @@ const Profile: React.FC = () => {
                 placeholder="your@email.com"
               />
 
-              <div className="flex items-center gap-2 mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-blue-700 dark:text-blue-400 text-xs">
+              <div className="flex items-center gap-2.5 mt-4 p-3.5 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl text-indigo-700 dark:text-indigo-400 text-xs ring-1 ring-indigo-100 dark:ring-indigo-800/30">
                 <ShieldCheck size={16} />
                 <span>
-                  Role: <strong>{user?.role?.replace("-", " ")}</strong>
+                  Role:{" "}
+                  <strong className="capitalize">
+                    {user?.role?.replace("-", " ")}
+                  </strong>
                 </span>
               </div>
 
@@ -162,7 +165,7 @@ const Profile: React.FC = () => {
         </div>
 
         <div className="md:col-span-1">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-base font-bold text-gray-900 dark:text-white mb-1.5">
             Security
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
@@ -171,7 +174,7 @@ const Profile: React.FC = () => {
         </div>
 
         <div className="md:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100/80 dark:border-gray-700/60 p-6">
             <form
               onSubmit={handlePasswordSubmit(onPasswordSubmit)}
               className="space-y-4"
@@ -183,7 +186,7 @@ const Profile: React.FC = () => {
                 error={passwordErrors.currentPassword?.message}
                 placeholder="••••••••"
               />
-              <div className="h-px bg-gray-100 dark:bg-gray-700 my-4" />
+              <div className="h-px bg-gray-100 dark:bg-gray-700/50 my-4" />
               <Input
                 label="New Password"
                 type="password"

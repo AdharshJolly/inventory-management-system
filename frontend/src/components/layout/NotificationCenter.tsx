@@ -94,7 +94,7 @@ const NotificationCenter: React.FC = () => {
       case "SUCCESS":
         return "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 border-green-100 dark:border-green-800";
       default:
-        return "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800";
+        return "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-800";
     }
   };
 
@@ -108,33 +108,33 @@ const NotificationCenter: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`relative p-2 rounded-lg transition-colors ${
+        className={`relative p-2 rounded-xl transition-all duration-200 ${
           isOpen
-            ? "bg-gray-100 dark:bg-gray-700 text-blue-600 dark:text-blue-400"
-            : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+            ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
+            : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50"
         }`}
       >
         <Bell size={20} />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white dark:ring-gray-800">
+          <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white dark:ring-gray-800 animate-pulse">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 rounded-xl bg-white dark:bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 dark:ring-gray-700 z-50 overflow-hidden transform origin-top-right transition-all">
-          <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+        <div className="absolute right-0 mt-2 w-80 rounded-2xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-2xl ring-1 ring-gray-200/50 dark:ring-gray-700/50 z-50 overflow-hidden animate-scale-in">
+          <div className="flex items-center justify-between p-4 border-b border-gray-100/80 dark:border-gray-700/50">
+            <h3 className="text-sm font-bold text-gray-900 dark:text-white">
               Notifications
             </h3>
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                className="text-xs font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center gap-1 transition-colors"
               >
                 <CheckCheck size={14} />
-                Mark all as read
+                Mark all read
               </button>
             )}
           </div>
@@ -142,7 +142,7 @@ const NotificationCenter: React.FC = () => {
           <div className="max-h-[400px] overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="p-8 text-center">
-                <div className="mx-auto w-12 h-12 bg-gray-50 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-300 dark:text-gray-500 mb-3">
+                <div className="mx-auto w-12 h-12 bg-gray-50 dark:bg-gray-700/50 rounded-xl flex items-center justify-center text-gray-300 dark:text-gray-500 mb-3">
                   <Inbox size={24} />
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -150,18 +150,18 @@ const NotificationCenter: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-50 dark:divide-gray-700">
+              <div className="divide-y divide-gray-100/60 dark:divide-gray-700/40">
                 {notifications.map((n) => (
                   <div
                     key={n._id}
                     onClick={() => markAsRead(n._id, n.link)}
-                    className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer relative group ${
-                      !n.isRead ? "bg-blue-50/30 dark:bg-blue-900/20" : ""
+                    className={`p-4 hover:bg-gray-50/80 dark:hover:bg-gray-700/30 transition-colors cursor-pointer relative group ${
+                      !n.isRead ? "bg-indigo-50/30 dark:bg-indigo-900/10" : ""
                     }`}
                   >
                     <div className="flex gap-3">
                       <div
-                        className={`mt-0.5 shrink-0 w-8 h-8 rounded-full flex items-center justify-center border ${getTypeStyles(n.type)}`}
+                        className={`mt-0.5 shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border ${getTypeStyles(n.type)}`}
                       >
                         {getIcon(n.type)}
                       </div>
@@ -181,7 +181,7 @@ const NotificationCenter: React.FC = () => {
                           {n.link && (
                             <ExternalLink
                               size={10}
-                              className="text-gray-300 group-hover:text-blue-400 transition-colors"
+                              className="text-gray-300 group-hover:text-indigo-400 transition-colors"
                             />
                           )}
                         </div>
@@ -193,7 +193,7 @@ const NotificationCenter: React.FC = () => {
                               e.stopPropagation();
                               markAsRead(n._id);
                             }}
-                            className="p-1 rounded-full bg-white dark:bg-gray-700 shadow-sm border border-gray-100 dark:border-gray-600 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                            className="p-1 rounded-lg bg-white dark:bg-gray-700 shadow-sm border border-gray-100 dark:border-gray-600 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
                             title="Mark as read"
                           >
                             <Check size={12} />
@@ -207,13 +207,13 @@ const NotificationCenter: React.FC = () => {
             )}
           </div>
 
-          <div className="p-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700 text-center">
+          <div className="p-3 bg-gray-50/50 dark:bg-gray-800/30 border-t border-gray-100/80 dark:border-gray-700/50 text-center">
             <button
               onClick={() => {
                 setIsOpen(false);
-                navigate("/history"); // Or a dedicated notifications page if created
+                navigate("/history");
               }}
-              className="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
             >
               View all activity
             </button>

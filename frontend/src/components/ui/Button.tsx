@@ -16,17 +16,17 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 disabled:pointer-events-none disabled:opacity-50";
+    "flex items-center justify-center rounded-xl font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 disabled:pointer-events-none disabled:opacity-50 cursor-pointer active:scale-[0.98]";
 
   const variants = {
     primary:
-      "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600",
+      "bg-gradient-to-r from-indigo-600 to-blue-600 text-white hover:from-indigo-700 hover:to-blue-700 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 dark:shadow-indigo-500/10 focus-visible:ring-indigo-500",
     secondary:
-      "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600",
+      "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700/80 dark:text-gray-200 dark:hover:bg-gray-600/80 focus-visible:ring-gray-400",
     outline:
-      "border border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200",
+      "border border-gray-200 dark:border-gray-600 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 dark:text-gray-200 focus-visible:ring-gray-400",
     danger:
-      "bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600",
+      "bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700 shadow-md shadow-red-500/20 hover:shadow-lg hover:shadow-red-500/30 focus-visible:ring-red-500",
   };
 
   const sizes = {
@@ -35,7 +35,7 @@ const Button: React.FC<ButtonProps> = ({
     lg: "h-12 px-6 text-base",
   };
 
-  // Check if className contains responsive display utilities (e.g., hidden, sm:flex, sm:hidden)
+  // Check if className contains responsive display utilities
   const hasResponsiveDisplay =
     /\b(hidden|flex|block|inline|grid|(?:xs|sm|md|lg|xl|2xl):(hidden|flex|block|inline|grid))\b/.test(
       className,
