@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard,
   Package,
@@ -9,6 +10,7 @@ import {
   ArrowLeftRight,
   X,
   Boxes,
+  UserCog,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -18,6 +20,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
+  const { user } = useAuth();
 
   const mainMenuItems = [
     { name: "Dashboard", path: "/", icon: LayoutDashboard },
@@ -34,6 +37,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { name: "Suppliers", path: "/suppliers", icon: Users },
     { name: "Locations", path: "/locations", icon: MapPin },
   ];
+
+  const adminItems =
+    user?.role === "warehouse-manager"
+      ? [{ name: "Users", path: "/users", icon: UserCog }]
+      : [];
 
   const renderMenuSection = (title: string, items: typeof mainMenuItems) => (
     <div className="space-y-1">
@@ -102,6 +110,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {renderMenuSection("Overview", mainMenuItems)}
         {renderMenuSection("Operations", operationItems)}
         {renderMenuSection("Management", managementItems)}
+        {adminItems.length > 0 &&
+          renderMenuSection("Administration", adminItems)}
 
         {/* Bottom decoration */}
         <div className="mt-8 mx-2 p-4 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 border border-indigo-100/50 dark:border-indigo-800/30">

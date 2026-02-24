@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "./context/AuthContext";
+import RoleGuard from "./components/auth/RoleGuard";
 import MainLayout from "./components/layout/MainLayout";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
@@ -10,6 +11,7 @@ import Inventory from "./pages/Inventory";
 import Profile from "./pages/Profile";
 import TransactionHistory from "./pages/TransactionHistory";
 import TransactionExecution from "./pages/TransactionExecution";
+import Users from "./pages/Users";
 import Login from "./pages/Login";
 
 // Protected Route Wrapper
@@ -106,6 +108,20 @@ function App() {
           element={
             <ProtectedRoute>
               <TransactionHistory />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <RoleGuard
+                allowedRoles={["warehouse-manager"]}
+                fallback={<Navigate to="/" replace />}
+              >
+                <Users />
+              </RoleGuard>
             </ProtectedRoute>
           }
         />
