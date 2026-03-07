@@ -10,7 +10,9 @@ export const getUsers = async (req: Request, res: Response) => {
     const users = await User.find().select("-password").sort("-createdAt");
     res.json(users);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -22,13 +24,15 @@ export const getUser = async (req: Request, res: Response) => {
     const user = await User.findById(req.params.id).select("-password");
 
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "Account not found." });
       return;
     }
 
     res.json(user);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -43,7 +47,9 @@ export const createUser = async (req: Request, res: Response) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      res.status(400).json({ message: "User already exists with this email" });
+      res
+        .status(400)
+        .json({ message: "An account with this email already exists." });
       return;
     }
 
@@ -54,7 +60,7 @@ export const createUser = async (req: Request, res: Response) => {
       "store-clerk",
     ];
     if (role && !validRoles.includes(role)) {
-      res.status(400).json({ message: "Invalid role" });
+      res.status(400).json({ message: "Please choose a valid role." });
       return;
     }
 
@@ -72,10 +78,14 @@ export const createUser = async (req: Request, res: Response) => {
 
       res.status(201).json(userObj);
     } else {
-      res.status(400).json({ message: "Invalid user data" });
+      res
+        .status(400)
+        .json({ message: "Please check the details and try again." });
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -87,7 +97,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "Account not found." });
       return;
     }
 
@@ -97,7 +107,7 @@ export const updateUser = async (req: Request, res: Response) => {
     if (email && email !== user.email) {
       const emailExists = await User.findOne({ email });
       if (emailExists) {
-        res.status(400).json({ message: "Email already in use" });
+        res.status(400).json({ message: "Email is already in use." });
         return;
       }
     }
@@ -109,7 +119,7 @@ export const updateUser = async (req: Request, res: Response) => {
       "store-clerk",
     ];
     if (role && !validRoles.includes(role)) {
-      res.status(400).json({ message: "Invalid role" });
+      res.status(400).json({ message: "Please choose a valid role." });
       return;
     }
 
@@ -123,7 +133,7 @@ export const updateUser = async (req: Request, res: Response) => {
       if (password.length < 6) {
         res
           .status(400)
-          .json({ message: "Password must be at least 6 characters" });
+          .json({ message: "Password must be at least 6 characters." });
         return;
       }
       user.password = password;
@@ -135,7 +145,9 @@ export const updateUser = async (req: Request, res: Response) => {
 
     res.json(userObj);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -147,19 +159,21 @@ export const deleteUser = async (req: any, res: Response) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "Account not found." });
       return;
     }
 
     // Prevent admin from deleting themselves
     if (user._id.toString() === req.user._id.toString()) {
-      res.status(400).json({ message: "You cannot delete your own account" });
+      res.status(400).json({ message: "You cannot delete your own account." });
       return;
     }
 
     await user.deleteOne();
-    res.json({ message: "User removed successfully" });
+    res.json({ message: "User removed successfully." });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };

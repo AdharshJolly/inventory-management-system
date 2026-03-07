@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
+import type { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -13,7 +13,9 @@ export const register = async (req: Request, res: Response) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      res.status(400).json({ message: 'User already exists' });
+      res
+        .status(400)
+        .json({ message: "An account with this email already exists." });
       return;
     }
 
@@ -22,25 +24,29 @@ export const register = async (req: Request, res: Response) => {
       name,
       email,
       password,
-      role
+      role,
     });
 
     if (user) {
       const token = generateToken(user._id.toString());
-      
+
       // Remove password from output
       const userObj = user.toObject();
       delete (userObj as any).password;
 
       res.status(201).json({
         user: userObj,
-        token
+        token,
       });
     } else {
-      res.status(400).json({ message: 'Invalid user data' });
+      res
+        .status(400)
+        .json({ message: "Please check your details and try again." });
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -52,23 +58,25 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     // Check for user email
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
 
     if (user && (await user.comparePassword(password))) {
       const token = generateToken(user._id.toString());
-      
+
       const userObj = user.toObject();
       delete (userObj as any).password;
 
       res.json({
         user: userObj,
-        token
+        token,
       });
     } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+      res.status(401).json({ message: "Email or password is incorrect." });
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -80,7 +88,9 @@ export const getMe = async (req: any, res: Response) => {
     const user = await User.findById(req.user._id);
     res.json(user);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -104,10 +114,12 @@ export const updateProfile = async (req: any, res: Response) => {
         role: updatedUser.role,
       });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "Account not found." });
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -116,7 +128,7 @@ export const updateProfile = async (req: any, res: Response) => {
 // @access  Private
 export const changePassword = async (req: any, res: Response) => {
   try {
-    const user = await User.findById(req.user._id).select('+password');
+    const user = await User.findById(req.user._id).select("+password");
 
     if (user) {
       const { currentPassword, newPassword } = req.body;
@@ -124,24 +136,28 @@ export const changePassword = async (req: any, res: Response) => {
       // Check current password
       const isMatch = await user.comparePassword(currentPassword);
       if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid current password' });
+        return res
+          .status(400)
+          .json({ message: "Current password is incorrect." });
       }
 
       user.password = newPassword;
       await user.save();
 
-      res.status(200).json({ message: 'Password updated successfully' });
+      res.status(200).json({ message: "Password updated successfully" });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "Account not found." });
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
 // Generate JWT
 const generateToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'secret123', {
-    expiresIn: '30d'
+  return jwt.sign({ id }, process.env.JWT_SECRET || "secret123", {
+    expiresIn: "30d",
   });
 };

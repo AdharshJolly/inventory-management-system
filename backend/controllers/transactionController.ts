@@ -1,30 +1,36 @@
-import { Request, Response } from 'express';
-import mongoose from 'mongoose';
-import Transaction, { TransactionType } from '../models/Transaction';
-import Stock from '../models/Stock';
-import Product from '../models/Product';
-import User from '../models/User';
-import Notification, { NotificationType } from '../models/Notification';
+import type { Request, Response } from "express";
+import mongoose from "mongoose";
+import Transaction, { TransactionType } from "../models/Transaction";
+import Stock from "../models/Stock";
+import Product from "../models/Product";
+import User from "../models/User";
+import Notification, { NotificationType } from "../models/Notification";
 
 /**
  * Utility to notify all managers about stock alerts
  */
-const notifyManagers = async (message: string, type: NotificationType, link?: string) => {
+const notifyManagers = async (
+  message: string,
+  type: NotificationType,
+  link?: string,
+) => {
   try {
-    const managers = await User.find({ role: 'warehouse-manager' }).select('_id');
-    const notifications = managers.map(manager => ({
+    const managers = await User.find({ role: "warehouse-manager" }).select(
+      "_id",
+    );
+    const notifications = managers.map((manager) => ({
       user: manager._id,
       message,
       type,
       link,
-      isRead: false
+      isRead: false,
     }));
 
     if (notifications.length > 0) {
       await Notification.insertMany(notifications);
     }
   } catch (err) {
-    console.error('Notification error:', err);
+    console.error("Notification error:", err);
   }
 };
 
@@ -39,9 +45,9 @@ export const getTransactions = async (req: Request, res: Response) => {
 
     const totalDocs = await Transaction.countDocuments();
     const transactions = await Transaction.find()
-      .populate('product', 'name sku')
-      .populate('location', 'name')
-      .populate('user', 'name')
+      .populate("product", "name sku")
+      .populate("location", "name")
+      .populate("user", "name")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
@@ -52,11 +58,13 @@ export const getTransactions = async (req: Request, res: Response) => {
         totalDocs,
         totalPages: Math.ceil(totalDocs / limit),
         currentPage: page,
-        limit
-      }
+        limit,
+      },
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -66,18 +74,25 @@ export const getTransactions = async (req: Request, res: Response) => {
 export const createTransaction = async (req: any, res: Response) => {
   const { product, location, type, quantity, notes } = req.body;
 
-  const isTest = process.env.NODE_ENV === 'test';
-  
+  const isTest = process.env.NODE_ENV === "test";
+
   if (isTest) {
     try {
       const productDoc = await Product.findById(product);
-      if (!productDoc) return res.status(404).json({ message: 'Product not found' });
+      if (!productDoc) {
+        return res.status(404).json({ message: "Product not found." });
+      }
 
-      let stock = await Stock.findOne({ product, location }).populate('location', 'name');
+      let stock = await Stock.findOne({ product, location }).populate(
+        "location",
+        "name",
+      );
 
       if (!stock) {
         if (type === TransactionType.OUT) {
-          return res.status(400).json({ message: 'Cannot record OUT transaction: No stock at this location' });
+          return res.status(400).json({
+            message: "No stock is available at this location.",
+          });
         }
         stock = new Stock({ product, location, currentQuantity: 0 });
       }
@@ -86,7 +101,9 @@ export const createTransaction = async (req: any, res: Response) => {
         stock.currentQuantity += Number(quantity);
       } else {
         if (stock.currentQuantity < quantity) {
-          return res.status(400).json({ message: 'Insufficient stock at this location' });
+          return res
+            .status(400)
+            .json({ message: "Not enough stock at this location." });
         }
         stock.currentQuantity -= Number(quantity);
       }
@@ -96,11 +113,18 @@ export const createTransaction = async (req: any, res: Response) => {
       // Check for low stock alert
       if (stock.currentQuantity <= stock.minLevel) {
         // Need to re-query to get location name for message if it wasn't populated or was new
-        const stockWithLoc = await Stock.findOne({ product, location }).populate('location', 'name');
+        const stockWithLoc = await Stock.findOne({
+          product,
+          location,
+        }).populate("location", "name");
+        const locationName =
+          typeof stockWithLoc?.location === "object" && stockWithLoc?.location
+            ? (stockWithLoc.location as any).name
+            : "Unknown";
         await notifyManagers(
-          `Low stock alert: ${productDoc.name} (${productDoc.sku}) at ${stockWithLoc?.location?.name}. Current: ${stock.currentQuantity}`,
+          `Low stock alert: ${productDoc.name} (${productDoc.sku}) at ${locationName}. Current: ${stock.currentQuantity}`,
           NotificationType.LOW_STOCK,
-          '/products'
+          "/products",
         );
       }
 
@@ -110,12 +134,14 @@ export const createTransaction = async (req: any, res: Response) => {
         type,
         quantity,
         user: req.user._id,
-        notes
+        notes,
       });
 
       return res.status(201).json(transaction);
     } catch (error: any) {
-      return res.status(500).json({ message: error.message });
+      return res
+        .status(500)
+        .json({ message: "Something went wrong. Please try again later." });
     }
   }
 
@@ -127,7 +153,7 @@ export const createTransaction = async (req: any, res: Response) => {
     if (!productDoc) {
       await session.abortTransaction();
       session.endSession();
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: "Product not found." });
     }
 
     let stock = await Stock.findOne({ product, location }).session(session);
@@ -136,7 +162,9 @@ export const createTransaction = async (req: any, res: Response) => {
       if (type === TransactionType.OUT) {
         await session.abortTransaction();
         session.endSession();
-        return res.status(400).json({ message: 'Cannot record OUT transaction: No stock at this location' });
+        return res.status(400).json({
+          message: "No stock is available at this location.",
+        });
       }
       stock = new Stock({ product, location, currentQuantity: 0 });
     }
@@ -144,7 +172,9 @@ export const createTransaction = async (req: any, res: Response) => {
     if (type === TransactionType.OUT && stock.currentQuantity < quantity) {
       await session.abortTransaction();
       session.endSession();
-      return res.status(400).json({ message: 'Insufficient stock at this location' });
+      return res
+        .status(400)
+        .json({ message: "Not enough stock at this location." });
     }
 
     if (type === TransactionType.IN) {
@@ -157,22 +187,34 @@ export const createTransaction = async (req: any, res: Response) => {
 
     // Check for low stock alert (outside session or with session)
     if (stock.currentQuantity <= stock.minLevel) {
-      const stockWithLoc = await Stock.findOne({ product, location }).populate('location', 'name');
+      const stockWithLoc = await Stock.findOne({ product, location }).populate(
+        "location",
+        "name",
+      );
+      const locationName =
+        typeof stockWithLoc?.location === "object" && stockWithLoc?.location
+          ? (stockWithLoc.location as any).name
+          : "Unknown";
       await notifyManagers(
-        `Low stock alert: ${productDoc.name} (${productDoc.sku}) at ${stockWithLoc?.location?.name}. Current: ${stock.currentQuantity}`,
+        `Low stock alert: ${productDoc.name} (${productDoc.sku}) at ${locationName}. Current: ${stock.currentQuantity}`,
         NotificationType.LOW_STOCK,
-        '/products'
+        "/products",
       );
     }
 
-    const transaction = await Transaction.create([{
-      product,
-      location,
-      type,
-      quantity,
-      user: req.user._id,
-      notes
-    }], { session });
+    const transaction = await Transaction.create(
+      [
+        {
+          product,
+          location,
+          type,
+          quantity,
+          user: req.user._id,
+          notes,
+        },
+      ],
+      { session },
+    );
 
     await session.commitTransaction();
     session.endSession();
@@ -181,7 +223,9 @@ export const createTransaction = async (req: any, res: Response) => {
   } catch (error: any) {
     await session.abortTransaction();
     session.endSession();
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -191,11 +235,13 @@ export const createTransaction = async (req: any, res: Response) => {
 export const getStocks = async (req: Request, res: Response) => {
   try {
     const stocks = await Stock.find()
-      .populate('product', 'name sku basePrice')
-      .populate('location', 'name');
+      .populate("product", "name sku basePrice")
+      .populate("location", "name");
     res.status(200).json(stocks);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -208,16 +254,18 @@ export const updateStock = async (req: Request, res: Response) => {
     const stock = await Stock.findByIdAndUpdate(
       req.params.id,
       { minLevel },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!stock) {
-      return res.status(404).json({ message: 'Stock record not found' });
+      return res.status(404).json({ message: "Stock record not found." });
     }
 
     res.status(200).json(stock);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -229,61 +277,63 @@ export const getStockBreakdown = async (req: Request, res: Response) => {
     const breakdown = await Stock.aggregate([
       {
         $lookup: {
-          from: 'products',
-          localField: 'product',
-          foreignField: '_id',
-          as: 'productInfo'
-        }
+          from: "products",
+          localField: "product",
+          foreignField: "_id",
+          as: "productInfo",
+        },
       },
-      { $unwind: '$productInfo' },
+      { $unwind: "$productInfo" },
       {
         $lookup: {
-          from: 'locations',
-          localField: 'location',
-          foreignField: '_id',
-          as: 'locationInfo'
-        }
+          from: "locations",
+          localField: "location",
+          foreignField: "_id",
+          as: "locationInfo",
+        },
       },
-      { $unwind: '$locationInfo' },
+      { $unwind: "$locationInfo" },
       {
         $group: {
-          _id: '$product',
-          name: { $first: '$productInfo.name' },
-          sku: { $first: '$productInfo.sku' },
-          totalQuantity: { $sum: '$currentQuantity' },
-          totalMinLevel: { $sum: '$minLevel' },
+          _id: "$product",
+          name: { $first: "$productInfo.name" },
+          sku: { $first: "$productInfo.sku" },
+          totalQuantity: { $sum: "$currentQuantity" },
+          totalMinLevel: { $sum: "$minLevel" },
           locations: {
             $push: {
-              stockId: '$_id',
-              locationName: '$locationInfo.name',
-              quantity: '$currentQuantity',
-              minLevel: '$minLevel'
-            }
-          }
-        }
+              stockId: "$_id",
+              locationName: "$locationInfo.name",
+              quantity: "$currentQuantity",
+              minLevel: "$minLevel",
+            },
+          },
+        },
       },
       {
         $addFields: {
           status: {
             $cond: [
-              { $eq: ['$totalQuantity', 0] },
-              'Out of Stock',
+              { $eq: ["$totalQuantity", 0] },
+              "Out of Stock",
               {
                 $cond: [
-                  { $lte: ['$totalQuantity', '$totalMinLevel'] },
-                  'Low Stock',
-                  'In Stock'
-                ]
-              }
-            ]
-          }
-        }
+                  { $lte: ["$totalQuantity", "$totalMinLevel"] },
+                  "Low Stock",
+                  "In Stock",
+                ],
+              },
+            ],
+          },
+        },
       },
-      { $sort: { name: 1 } }
+      { $sort: { name: 1 } },
     ]);
 
     res.status(200).json(breakdown);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };

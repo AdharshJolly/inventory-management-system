@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import Notification from '../models/Notification';
+import type { Request, Response } from "express";
+import Notification from "../models/Notification";
 
 // @desc    Get user notifications
 // @route   GET /api/notifications
@@ -16,9 +16,9 @@ export const getNotifications = async (req: any, res: Response) => {
       .skip(skip)
       .limit(limit);
 
-    const unreadCount = await Notification.countDocuments({ 
-      user: req.user._id, 
-      isRead: false 
+    const unreadCount = await Notification.countDocuments({
+      user: req.user._id,
+      isRead: false,
     });
 
     res.status(200).json({
@@ -28,11 +28,13 @@ export const getNotifications = async (req: any, res: Response) => {
         totalDocs,
         totalPages: Math.ceil(totalDocs / limit),
         currentPage: page,
-        limit
-      }
+        limit,
+      },
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -44,16 +46,18 @@ export const markAsRead = async (req: any, res: Response) => {
     const notification = await Notification.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
       { isRead: true },
-      { new: true }
+      { new: true },
     );
 
     if (!notification) {
-      return res.status(404).json({ message: 'Notification not found' });
+      return res.status(404).json({ message: "Notification not found." });
     }
 
     res.status(200).json(notification);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -64,11 +68,13 @@ export const markAllAsRead = async (req: any, res: Response) => {
   try {
     await Notification.updateMany(
       { user: req.user._id, isRead: false },
-      { isRead: true }
+      { isRead: true },
     );
 
-    res.status(200).json({ message: 'All notifications marked as read' });
+    res.status(200).json({ message: "All notifications marked as read." });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };

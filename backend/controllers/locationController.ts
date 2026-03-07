@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import Location from '../models/Location';
+import type { Request, Response } from "express";
+import Location from "../models/Location";
 
 // @desc    Get all locations
 // @route   GET /api/locations
@@ -22,11 +22,13 @@ export const getLocations = async (req: Request, res: Response) => {
         totalDocs,
         totalPages: Math.ceil(totalDocs / limit),
         currentPage: page,
-        limit
-      }
+        limit,
+      },
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -37,12 +39,14 @@ export const getLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.findById(req.params.id);
     if (!location) {
-      res.status(404).json({ message: 'Location not found' });
+      res.status(404).json({ message: "Location not found." });
       return;
     }
     res.status(200).json(location);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
 
@@ -54,7 +58,9 @@ export const createLocation = async (req: Request, res: Response) => {
     const location = await Location.create(req.body);
     res.status(201).json(location);
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    res
+      .status(400)
+      .json({ message: "Please check the location details and try again." });
   }
 };
 
@@ -65,15 +71,17 @@ export const updateLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-      runValidators: true
+      runValidators: true,
     });
     if (!location) {
-      res.status(404).json({ message: 'Location not found' });
+      res.status(404).json({ message: "Location not found." });
       return;
     }
     res.status(200).json(location);
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    res
+      .status(400)
+      .json({ message: "Please check the location details and try again." });
   }
 };
 
@@ -84,11 +92,13 @@ export const deleteLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.findByIdAndDelete(req.params.id);
     if (!location) {
-      res.status(404).json({ message: 'Location not found' });
+      res.status(404).json({ message: "Location not found." });
       return;
     }
-    res.status(200).json({ message: 'Location removed' });
+    res.status(200).json({ message: "Location removed." });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };
