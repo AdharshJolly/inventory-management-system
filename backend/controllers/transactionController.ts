@@ -3,36 +3,8 @@ import mongoose from "mongoose";
 import Transaction, { TransactionType } from "../models/Transaction";
 import Stock from "../models/Stock";
 import Product from "../models/Product";
-import User from "../models/User";
-import Notification, { NotificationType } from "../models/Notification";
-
-/**
- * Utility to notify all managers about stock alerts
- */
-const notifyManagers = async (
-  message: string,
-  type: NotificationType,
-  link?: string,
-) => {
-  try {
-    const managers = await User.find({ role: "warehouse-manager" }).select(
-      "_id",
-    );
-    const notifications = managers.map((manager) => ({
-      user: manager._id,
-      message,
-      type,
-      link,
-      isRead: false,
-    }));
-
-    if (notifications.length > 0) {
-      await Notification.insertMany(notifications);
-    }
-  } catch (err) {
-    console.error("Notification error:", err);
-  }
-};
+import { NotificationType } from "../models/Notification";
+import { notifyManagers } from "../utils/notification";
 
 // @desc    Get all transactions
 // @route   GET /api/transactions

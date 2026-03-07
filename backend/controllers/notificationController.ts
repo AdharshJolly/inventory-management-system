@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import Notification from "../models/Notification";
+import { addNotificationClient } from "../utils/notificationStream";
 
 // @desc    Get user notifications
 // @route   GET /api/notifications
@@ -77,4 +78,11 @@ export const markAllAsRead = async (req: any, res: Response) => {
       .status(500)
       .json({ message: "Something went wrong. Please try again later." });
   }
+};
+
+// @desc    Stream user notifications (SSE)
+// @route   GET /api/notifications/stream
+// @access  Private
+export const streamNotifications = async (req: any, res: Response) => {
+  addNotificationClient(req.user._id.toString(), res);
 };

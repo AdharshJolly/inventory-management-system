@@ -40,9 +40,57 @@ const NotificationCenter: React.FC = () => {
 
   useEffect(() => {
     fetchNotifications();
-    // Poll for new notifications every 30 seconds
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
+
+    let pollingTimer: number | undefined;
+    let stream: EventSource | null = null;
+
+    const startPolling = () => {
+      if (!pollingTimer) {
+        pollingTimer = window.setInterval(fetchNotifications, 60000);
+      }
+    };
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      const baseUrl = api.defaults.baseURL || "";
+      const streamUrl = `${baseUrl}/notifications/stream?token=${encodeURIComponent(
+        token,
+      )}`;
+
+      stream = new EventSource(streamUrl);
+
+      stream.onmessage = (event) => {
+        if (!event.data) return;
+        const payload = JSON.parse(event.data) as {
+          type?: string;
+          notification?: Notification;
+        };
+
+        if (payload.type === "notification" && payload.notification) {
+          const incoming = payload.notification;
+          setNotifications((prev) => {
+            const next = [incoming, ...prev].slice(0, 10);
+            return next;
+          });
+          if (!incoming.isRead) {
+            setUnreadCount((prev) => prev + 1);
+          }
+        }
+      };
+
+      stream.onerror = () => {
+        stream?.close();
+        stream = null;
+        startPolling();
+      };
+    } else {
+      startPolling();
+    }
+
+    return () => {
+      if (stream) stream.close();
+      if (pollingTimer) window.clearInterval(pollingTimer);
+    };
   }, []);
 
   useEffect(() => {
